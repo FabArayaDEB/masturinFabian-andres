@@ -134,15 +134,15 @@ class TrabajadorModel {
             if (err) return callback(err);
 
             // Finalizar contratos activos
-            const queryFinalizarContrato = 'UPDATE contratos SET estado = "finalizado" WHERE rut = ? AND estado = "activo"';
+            const queryFinalizarContrato = 'UPDATE contratos SET estado = "finalizado", fecha_fin = CURDATE() WHERE rut = ? AND estado = "activo"';
+            
             db.query(queryFinalizarContrato, [rut], (err) => {
                 if (err) {
                     return db.rollback(() => callback(err));
                 }
 
-                // Eliminar usuario
-                const queryEliminarUsuario = 'DELETE FROM usuarios WHERE rut = ? AND rol = "trabajador"';
-                db.query(queryEliminarUsuario, [rut], (err, result) => {
+                const queryDesactivarUsuario = 'UPDATE usuarios SET rol = "inactivo" WHERE rut = ? AND rol = "trabajador"';
+                db.query(queryDesactivarUsuario, [rut], (err, result) => {
                     if (err) {
                         return db.rollback(() => callback(err));
                     }
@@ -155,7 +155,7 @@ class TrabajadorModel {
                         if (err) {
                             return db.rollback(() => callback(err));
                         }
-                        callback(null, { message: 'Trabajador eliminado exitosamente' });
+                        callback(null, { message: 'Trabajador desactivado exitosamente' });
                     });
                 });
             });
