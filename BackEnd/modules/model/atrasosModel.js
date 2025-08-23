@@ -1,18 +1,17 @@
 const db = require('../../db/db');
 
 exports.getAtrasos = (data, callback) => {
-    const {fecha, hora_entrada, hora_salida} = data;
+    const {fecha_inicio, fecha_fin, hora_entrada} = data;
 
-    db.query('SELECT * FROM asistencias WHERE fecha = ? AND hora_entrada >= ? AND hora_salida <= ?', [fecha, hora_entrada, hora_salida], (err, results) => {
+    db.query('SELECT * FROM asistencias WHERE fecha BETWEEN ? AND ? AND hora_entrada > ?', [fecha_inicio, fecha_fin, hora_entrada], (err, results) => {
         if (err) return callback(err);
 
-        if (!results || results.length === 0) return callback(new Error("Datos no disponibles"));
+        if (!results || results.length === 0) return callback(new Error("No hay atrasos registrados en las fechas ingresadas"));
 
         const reporte = results.map(r => ({
             rut: r.rut,
             fecha: r.fecha,
             hora_entrada: r.hora_entrada,
-            hora_salida: r.hora_salida
 
         }));
 
