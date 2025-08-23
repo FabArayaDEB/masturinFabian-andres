@@ -1,4 +1,5 @@
 const db = require('../../db/db');
+const bcrypt = require('bcrypt');
 
 class TrabajadorModel {
     // Obtener todos los trabajadores
@@ -27,25 +28,25 @@ class TrabajadorModel {
 
     // Crear nuevo trabajador
     static crear(trabajador, callback) {
-        db.beginTransaction((err) => {
-            if (err) return callback(err);
+        const saltRounds = 10;
+        bcrypt.hash(trabajador.contraseña, saltRounds, (err, hashedPassword) => {
+            if (err) {
+                return callback(err);
+            }
 
-            // Insertar usuario
-            const queryUsuario = 'INSERT INTO usuarios (rut, correo, contraseña, rol) VALUES (?, ?, ?, ?)';
-            db.query(queryUsuario, [trabajador.rut, trabajador.correo, trabajador.contraseña, 'trabajador'], (err, result) => {
-                if (err) {
-                    return db.rollback(() => callback(err));
-                }
+            db.beginTransaction((err) => {
+                if (err) return callback(err);
 
-                // Insertar contrato si se proporciona información
-                if (trabajador.cargo && trabajador.sueldo && trabajador.tipo_contrato) {
-                    const queryContrato = `
-                        INSERT INTO contratos (rut, fecha_inicio, fecha_fin, cargo, sueldo, tipo_contrato, estado) 
-                        VALUES (?, ?, ?, ?, ?, ?, 'activo')
-                    `;
+                const queryUsuario = 'INSERT INTO usuarios (rut, correo, contraseña, rol) VALUES (?, ?, ?, "trabajador")';
+                db.query(queryUsuario, [trabajador.rut, trabajador.correo, hashedPassword], (err, result) => {
+                    if (err) {
+                        return db.rollback(() => callback(err));
+                    }
+
+                    const queryContrato = 'INSERT INTO contratos (rut, fecha_inicio, fecha_fin, cargo, sueldo, tipo_contrato) VALUES (?, ?, ?, ?, ?, ?)';
                     db.query(queryContrato, [
-                        trabajador.rut, 
-                        trabajador.fecha_inicio || new Date().toISOString().split('T')[0],
+                        trabajador.rut,
+                        trabajador.fecha_inicio,
                         trabajador.fecha_fin || null,
                         trabajador.cargo,
                         trabajador.sueldo,
@@ -54,31 +55,38 @@ class TrabajadorModel {
                         if (err) {
                             return db.rollback(() => callback(err));
                         }
+
                         db.commit((err) => {
                             if (err) {
                                 return db.rollback(() => callback(err));
                             }
-                            callback(null, { rut: trabajador.rut, message: 'Trabajador creado exitosamente' });
+                            callback(null, { message: 'Trabajador creado exitosamente', rut: trabajador.rut });
                         });
                     });
-                } else {
-                    db.commit((err) => {
-                        if (err) {
-                            return db.rollback(() => callback(err));
-                        }
-                        callback(null, { rut: trabajador.rut, message: 'Trabajador creado exitosamente' });
-                    });
-                }
+                });
             });
         });
     }
 
-    // Actualizar trabajador
     static actualizar(rut, trabajador, callback) {
+        if (trabajador.contraseña) {
+            const saltRounds = 10;
+            bcrypt.hash(trabajador.contraseña, saltRounds, (err, hashedPassword) => {
+                if (err) {
+                    return callback(err);
+                }
+                
+                this.actualizarConContraseña(rut, { ...trabajador, contraseña: hashedPassword }, callback);
+            });
+        } else {
+            this.actualizarSinContraseña(rut, trabajador, callback);
+        }
+    }
+
+    static actualizarConContraseña(rut, trabajador, callback) {
         db.beginTransaction((err) => {
             if (err) return callback(err);
 
-            // Actualizar usuario
             const queryUsuario = 'UPDATE usuarios SET correo = ?, contraseña = ? WHERE rut = ? AND rol = "trabajador"';
             db.query(queryUsuario, [trabajador.correo, trabajador.contraseña, rut], (err, result) => {
                 if (err) {
@@ -89,43 +97,70 @@ class TrabajadorModel {
                     return db.rollback(() => callback(new Error('Trabajador no encontrado')));
                 }
 
-                // Actualizar contrato si existe información
-                if (trabajador.cargo || trabajador.sueldo || trabajador.tipo_contrato) {
-                    const queryContrato = `
-                        UPDATE contratos 
-                        SET cargo = COALESCE(?, cargo), 
-                            sueldo = COALESCE(?, sueldo), 
-                            tipo_contrato = COALESCE(?, tipo_contrato),
-                            fecha_fin = COALESCE(?, fecha_fin)
-                        WHERE rut = ? AND estado = 'activo'
-                    `;
-                    db.query(queryContrato, [
-                        trabajador.cargo,
-                        trabajador.sueldo,
-                        trabajador.tipo_contrato,
-                        trabajador.fecha_fin,
-                        rut
-                    ], (err) => {
-                        if (err) {
-                            return db.rollback(() => callback(err));
-                        }
-                        db.commit((err) => {
-                            if (err) {
-                                return db.rollback(() => callback(err));
-                            }
-                            callback(null, { message: 'Trabajador actualizado exitosamente' });
-                        });
-                    });
-                } else {
+                const queryContrato = 'UPDATE contratos SET fecha_inicio = ?, fecha_fin = ?, cargo = ?, sueldo = ?, tipo_contrato = ? WHERE rut = ? AND estado = "activo"';
+                db.query(queryContrato, [
+                    trabajador.fecha_inicio,
+                    trabajador.fecha_fin || null,
+                    trabajador.cargo,
+                    trabajador.sueldo,
+                    trabajador.tipo_contrato,
+                    rut
+                ], (err) => {
+                    if (err) {
+                        return db.rollback(() => callback(err));
+                    }
+
                     db.commit((err) => {
                         if (err) {
                             return db.rollback(() => callback(err));
                         }
                         callback(null, { message: 'Trabajador actualizado exitosamente' });
                     });
-                }
+                });
             });
         });
+    }
+
+    static actualizarSinContraseña(rut, trabajador, callback) {
+        db.beginTransaction((err) => {
+            if (err) return callback(err);
+
+            const queryUsuario = 'UPDATE usuarios SET correo = ? WHERE rut = ? AND rol = "trabajador"';
+            db.query(queryUsuario, [trabajador.correo, rut], (err, result) => {
+                if (err) {
+                    return db.rollback(() => callback(err));
+                }
+
+                if (result.affectedRows === 0) {
+                    return db.rollback(() => callback(new Error('Trabajador no encontrado')));
+                }
+
+                const queryContrato = 'UPDATE contratos SET fecha_inicio = ?, fecha_fin = ?, cargo = ?, sueldo = ?, tipo_contrato = ? WHERE rut = ? AND estado = "activo"';
+                db.query(queryContrato, [
+                    trabajador.fecha_inicio,
+                    trabajador.fecha_fin || null,
+                    trabajador.cargo,
+                    trabajador.sueldo,
+                    trabajador.tipo_contrato,
+                    rut
+                ], (err) => {
+                    if (err) {
+                        return db.rollback(() => callback(err));
+                    }
+
+                    db.commit((err) => {
+                        if (err) {
+                            return db.rollback(() => callback(err));
+                        }
+                        callback(null, { message: 'Trabajador actualizado exitosamente' });
+                    });
+                });
+            });
+        });
+    }
+
+    static verificarContraseña(contraseñaPlana, contraseñaEncriptada, callback) {
+        bcrypt.compare(contraseñaPlana, contraseñaEncriptada, callback);
     }
 
     // Eliminar trabajador
