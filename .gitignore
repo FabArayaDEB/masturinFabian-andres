@@ -137,3 +137,64 @@ dist
 # Vite logs files
 vite.config.js.timestamp-*
 vite.config.ts.timestamp-*
+
+
+# Database files
+data/
+database/
+
+# Configuration files with sensitive data
+config/local.json
+config/production.json
+config/development.json
+
+# Upload directories
+uploads/
+temp/
+tmp/
+
+# IDE and Editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Backup files
+*.bak
+*.backup
+*.old
+
+# Test coverage reports
+coverage/
+.nyc_output/
+
+# Documentation build
+docs/build/
+
+# Local development files
+.local
+*.local
+
+# Session files
+sessions/
+*.session
+
+# Certificate files
+*.pem
+*.key
+*.crt
+*.cert
+
+# Deployment files
+deploy/
+.deploy/
