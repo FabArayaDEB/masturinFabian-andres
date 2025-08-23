@@ -1,13 +1,13 @@
 const loginModelo = require("../model/atrasosModel");
 
 exports.getAtrasos = (req, res) => {
-    const {fecha_inicio, fecha_fin, hora_entrada} = req.body;
+    const {fecha_inicio, fecha_fin} = req.body;
 
-    if (!fecha_inicio || !fecha_fin || !hora_entrada) {
+    if (!fecha_inicio || !fecha_fin) {
         return res.status(400).json({mensaje: "Faltan campos obligatorios"});
     }
 
-    loginModelo.getAtrasos({fecha_inicio, fecha_fin, hora_entrada}, (err, results) => {
+    loginModelo.getAtrasos({fecha_inicio, fecha_fin}, (err, results) => {
         if (err){
             return res.status(500).json({
                 mensaje: 'Error interno del servidor',
