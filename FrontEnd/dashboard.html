@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DashBoard</title>
+    <link rel="stylesheet" href="/FrontEnd/css/style.css">
+</head>
+<body>
+    <div class="login-container">
+        <div class="login-card">
+            <h2>Bienvenid@</h2>
+            <p id="welcome-msg"></p>
+            <button id="logout-btn" class="btn">Cerrar Sesión</button>
+        </div>"
+    </div>
+
+    <script>
+        const userEmail = localStorage.getItem('userEmail');
+        if (!userEmail){
+            window.location.href = 'index.html';
+        } else {
+            document.getElementById('welcome-msg').innerText =
+            'Has iniciado sesión como: ${userEmmail}';
+        }
+        document.getElementById('logout-btn')
+            .addEventListener('click', () => {
+            localStorage.removeItem('userEmail');
+            window.location.href = 'index.html';
+            });
+    </script>
+</body>
+</html>
