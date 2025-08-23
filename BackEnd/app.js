@@ -13,7 +13,7 @@ app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended : true}));
 
-app.use('/login', login);
+app.use('/', login);
 app.use('/api/trabajadores', trabajadorRutas);
 
 
