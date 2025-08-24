@@ -17,7 +17,7 @@ app.use(express.urlencoded({ extended : true}));
 
 app.use('/', login);
 app.use('/api/trabajadores', trabajadorRutas);
-app.use('/reportes', reportesRutas);
+app.use('/', reportesRutas);
 app.use('/', asistenciaRutas)
 
 

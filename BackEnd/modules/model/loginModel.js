@@ -1,5 +1,8 @@
 const db = require('../../db/db');
 const bcrypt = require("bcryptjs");
+const jwt = require('jsonwebtoken');
+
+const SECRET = "12345678910"
 
 exports.login = (data, callback) => {
     const { correo, contraseña } = data;
@@ -16,10 +19,15 @@ exports.login = (data, callback) => {
 
             if (!esValido) return callback(new Error("Credenciales incorrectas"));
 
-            callback(null, {
-                rut: usuario.rut,
-                correo: usuario.correo
-            });
+            const token = jwt.sign(
+                {correo: usuario.correo, rol: usuario.rol},
+                SECRET,
+
+                {expiresIn: "1h"}
+            );
+            console.log(token);
+
+            callback(null, {token});
         });
     });
 };
