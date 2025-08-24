@@ -17,7 +17,7 @@ exports.getInasistencias = (data, callback) => {
         LEFT JOIN asistencias a ON u.rut = a.rut AND DATE(a.fecha) = d.fecha
         WHERE a.rut IS NULL
         AND u.rol != 'admin'
-        ORDER BY u.rut, d.fecha`;
+        ORDER BY u.rut, fecha`;
 
     db.query(query, [fecha_inicio, fecha_inicio, fecha_fin], (err, results) => {
         if (err) return callback(err);
