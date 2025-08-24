@@ -15,12 +15,6 @@ exports.getAnticipadas = (req, res) => {
             });
         }
 
-        if (results.length === 0) {
-            return res.status(404).json({
-                error: 'No hay salidas anticipadas con las fechas ingresadas'
-            });
-        }
-
         res.json({
             data: results
         });
