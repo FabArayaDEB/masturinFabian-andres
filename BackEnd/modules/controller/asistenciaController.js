@@ -19,3 +19,21 @@ exports.marcarEntrada = (req, res) => {
 
     });
 }
+
+exports.marcarSalida = (req, res) => {
+    const {correo} = req.body;
+
+    if (!correo) return res.status(400).json({mensaje: 'Faltan datos necesarios'})
+
+    asistenciaModel.marcarSalida({correo}, (err, results) => {
+        if (err){
+            return res.status(500).json({
+                mensaje: 'Error interno del servidor',
+                error: err.message
+            });
+        }
+        res.json({
+            data: results
+        });
+    });
+}
