@@ -2,15 +2,14 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Iniciar Sesión</title>
-    <link rel="stylesheet" href="/FrontEnd/css/style.css">
+    <link rel="stylesheet" href="css/index.css">
 </head>
 <body>
     <div class="login-container">
         <div class="login-card">
             <h2>Registro de Horario</h2>
-            <ul id="error-list" class="errors-list">
+            <ul id="error-list" class="errors"></ul>
             <form id="login-form">
                 <div class="input-group">
                     <label for="email">Correo Electrónico:</label>
@@ -20,12 +19,11 @@
                     <label for="password">Contraseña:</label>
                     <input type="password" id="password" name="password" required>
                 </div>
-                <button type="submit" class="btn">Iniciar Sesión</button>
+                <button type="submit">Iniciar Sesión</button>
             </form>
-            <p class="">¿No tienes una cuenta? <a href="/FrontEnd/register.html">Regístrate aquí</a>
-            </p>
+            <p class="register-link">¿No tienes una cuenta? <a href="login.html">Regístrate aquí</a></p>
         </div>
-        </div>
-        <script src="/FrontEnd/js/script.js"></script>
-    </body>
+    </div>
+    <script src="js/auth.js"></script>
+</body>
 </html>

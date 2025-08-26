@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Panel Administrador</title>
+    <link rel="stylesheet" href="css/admin.css">
+</head>
+<body>
+    <div class="login-container">
+        <div class="login-card">
+            <h2>Panel de Administración</h2>
+            <ul>
+                <li><a href="usuarios.html">Gestión de Usuarios</a></li>
+                <li><a href="reportes.html">Reportes</a></li>
+                <li><a href="asistencia.html">Control de Asistencia</a></li>
+            </ul>
+            <button id="logout-btn">Cerrar Sesión</button>
+        </div>
+    </div>
+    <script>
+        document.getElementById('logout-btn').onclick = function() {
+            localStorage.clear();
+            window.location.href = 'index.html';
+        };
+    </script>
+</body>
+</html>

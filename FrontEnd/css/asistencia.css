@@ -1,0 +1,83 @@
+/* Estilos base para asistencia.html */
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap');
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+body {
+  font-family: 'Montserrat', Arial, sans-serif;
+  background: linear-gradient(120deg, #f7971e 0%, #ffd200 100%);
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  animation: fadeInBg 1.2s;
+}
+
+@keyframes fadeInBg {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.login-container {
+  width: 100%;
+  max-width: 400px;
+  padding: 20px;
+}
+
+.login-card {
+  background: rgba(255,255,255,0.97);
+  border-radius: 18px;
+  padding: 40px 30px;
+  box-shadow: 0 8px 32px rgba(247,151,30,0.18);
+  text-align: center;
+  animation: popIn 0.8s cubic-bezier(.68,-0.55,.27,1.55);
+}
+
+@keyframes popIn {
+  0% { transform: scale(0.8); opacity: 0; }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+.login-card h2 {
+  margin-bottom: 28px;
+  color: #f7971e;
+  font-weight: 700;
+  letter-spacing: 1px;
+  font-size: 2rem;
+}
+
+button {
+  width: 100%;
+  background: linear-gradient(90deg, #f7971e 0%, #ffd200 100%);
+  color: #fff;
+  padding: 14px;
+  border: none;
+  border-radius: 8px;
+  font-size: 17px;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(247,151,30,0.08);
+  transition: background 0.3s, transform 0.2s;
+  margin-bottom: 12px;
+}
+
+button:hover {
+  background: linear-gradient(90deg, #ffd200 0%, #f7971e 100%);
+  transform: translateY(-2px) scale(1.03);
+}
+
+#asistencia-msg {
+  margin-top: 16px;
+  color: #f7971e;
+  font-weight: bold;
+  font-size: 16px;
+  animation: fadeInMsg 0.7s;
+}
+
+@keyframes fadeInMsg {
+  from { opacity: 0; transform: translateY(10px);}
+  to { opacity: 1; transform: translateY(0);}
+}
