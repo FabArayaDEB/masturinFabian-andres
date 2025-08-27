@@ -1,0 +1,102 @@
+body, html {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  font-family: 'Segoe UI', sans-serif;
+  background-color: #f0f2f5;
+  color: #333;
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  text-align: center;
+}
+
+#logo-section {
+  margin-top: 2rem;
+  margin-bottom: 2rem;
+}
+
+#logo-section img {
+  max-width: 200px;
+  height: auto;
+}
+
+#clock-section {
+  margin-bottom: 3rem;
+}
+
+#clock {
+  font-size: 6rem;
+  margin-bottom: 0.5rem;
+  transition: all 0.3s ease-in-out;
+}
+
+#date {
+  font-size: 1.8rem;
+  margin-bottom: 1rem;
+  color: #666;
+}
+
+#contador-section {
+  margin-bottom: 2rem;
+}
+
+#contador-section h3 {
+  font-size: 1.2rem;
+  margin-bottom: 0.5rem;
+}
+
+#contador {
+  font-size: 2.5rem;
+  color: #007bff;
+}
+
+#marca-section h2 {
+  font-size: 1.5rem;
+  margin-bottom: 1rem;
+}
+
+#buttons button {
+  font-size: 1rem;
+  padding: 0.6rem 1.2rem;
+  margin: 0.5rem;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  color: #fff;
+  transition: background-color 0.2s ease;
+}
+
+#entrada {
+  background-color: #28a745;
+}
+
+#salida-colacion {
+  background-color: #ffc107;
+  color: #000;
+}
+
+#entrada-colacion {
+  background-color: #17a2b8;
+}
+
+#salida-turno {
+  background-color: #dc3545;
+}
+
+#buttons button:hover:not(:disabled) {
+  opacity: 0.9;
+}
+
+#registro {
+  list-style: none;
+  padding: 0;
+  margin-top: 1rem;
+  font-size: 1rem;
+  color: #444;
+}
