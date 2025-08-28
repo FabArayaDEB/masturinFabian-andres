@@ -1,27 +1,55 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <title>Panel Administrador</title>
-    <link rel="stylesheet" href="css/admin.css">
+  <meta charset="UTF-8">
+  <title>Panel Administrador</title>
+  <link rel="stylesheet" href="css/admin.css">
 </head>
 <body>
-    <div class="login-container">
-        <div class="login-card">
-            <h2>Panel de Administración</h2>
-            <ul>
-                <li><a href="usuarios.html">Gestión de Usuarios</a></li>
-                <li><a href="reportes.html">Reportes</a></li>
-                <li><a href="asistencia.html">Control de Asistencia</a></li>
-            </ul>
-            <button id="logout-btn">Cerrar Sesión</button>
-        </div>
-    </div>
-    <script>
-        document.getElementById('logout-btn').onclick = function() {
-            localStorage.clear();
-            window.location.href = 'index.html';
-        };
-    </script>
+  <div class="container">
+
+    <!-- 🔀 Navegación -->
+    <nav class="nav-tabs">
+      <button onclick="mostrarPanel('usuarios')">Gestionar Usuarios</button>
+      <button onclick="mostrarPanel('reportes')">Reportes</button>
+    </nav>
+
+    <!-- 👥 Panel de Gestión de Usuarios -->
+    <section id="panel-usuarios" class="panel">
+      <h2>Crear Usuario</h2>
+      <form id="usuario-form">
+        <input type="text" id="rut" placeholder="RUT" required>
+        <input type="email" id="correo" placeholder="Correo" required>
+        <input type="password" id="contraseña" placeholder="Contraseña" required>
+        <select id="rol">
+          <option value="trabajador">Trabajador</option>
+          <option value="admin">Administrador</option>
+        </select>
+
+        <h3>Contrato</h3>
+        <input type="date" id="fecha_inicio" placeholder="Inicio" required>
+        <input type="date" id="fecha_fin" placeholder="Fin" required>
+        <input type="text" id="cargo" placeholder="Cargo" required>
+        <input type="number" id="sueldo" placeholder="Sueldo" required>
+        <select id="tipo_contrato">
+          <option value="indefinido">Indefinido</option>
+          <option value="plazo fijo">Plazo Fijo</option>
+        </select>
+
+        <button type="submit">Crear Usuario</button>
+      </form>
+
+      <h3>Usuarios Registrados</h3>
+      <div id="usuarios-table"></div>
+    </section>
+
+    <!-- 📊 Panel de Reportes (por ahora vacío) -->
+    <section id="panel-reportes" class="panel hidden">
+      <h2>Reportes de Asistencia</h2>
+      <p>Esta sección se activará cuando los trabajadores comiencen a registrar sus marcas.</p>
+    </section>
+  </div>
+  <button href="index.html">cerrar sesion</button>
+  <script src="js/admin.js"></script>
 </body>
 </html>

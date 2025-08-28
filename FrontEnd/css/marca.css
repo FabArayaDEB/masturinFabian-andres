@@ -1,102 +1,391 @@
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;600&display=swap');
+
+:root {
+  --bg: #1e1f26;
+  --card: #2c2f36;
+  --text: #e0e0e0;
+  --accent: #00bcd4;
+  --danger: #ff5252;
+  --muted: #888;
+}
+
 body, html {
   margin: 0;
   padding: 0;
-  height: 100%;
-  font-family: 'Segoe UI', sans-serif;
-  background-color: #f0f2f5;
-  color: #333;
+  font-family: 'Space Grotesk', sans-serif;
+  background-color: var(--bg);
+  color: var(--text);
 }
 
 .container {
   display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: stretch;
+  gap: 1.5rem;
+  padding: 2rem;
+  max-width: 960px;
+  margin-left: 12vw;
+  margin-right: auto;
+}
+
+/* Botonera lateral izquierda */
+#botonera-lateral {
+  display: flex;
   flex-direction: column;
+  gap: 1.2rem;
   justify-content: center;
-  align-items: center;
-  height: 100%;
-  text-align: center;
-}
-
-#logo-section {
-  margin-top: 2rem;
-  margin-bottom: 2rem;
-}
-
-#logo-section img {
+  padding-top: 4rem;
+  min-width: 180px;
   max-width: 200px;
-  height: auto;
+  flex-shrink: 0;
 }
 
-#clock-section {
-  margin-bottom: 3rem;
-}
-
-#clock {
-  font-size: 6rem;
-  margin-bottom: 0.5rem;
-  transition: all 0.3s ease-in-out;
-}
-
-#date {
-  font-size: 1.8rem;
-  margin-bottom: 1rem;
-  color: #666;
-}
-
-#contador-section {
-  margin-bottom: 2rem;
-}
-
-#contador-section h3 {
+#titulo-marcas {
   font-size: 1.2rem;
-  margin-bottom: 0.5rem;
-}
-
-#contador {
-  font-size: 2.5rem;
-  color: #007bff;
-}
-
-#marca-section h2 {
-  font-size: 1.5rem;
+  font-weight: 600;
+  color: var(--accent);
   margin-bottom: 1rem;
+  margin-top: -1rem;
+  text-align: left;
 }
 
-#buttons button {
+#botonera-lateral button {
+  padding: 0.6rem 1rem;
   font-size: 1rem;
-  padding: 0.6rem 1.2rem;
-  margin: 0.5rem;
   border: none;
   border-radius: 6px;
-  cursor: pointer;
-  color: #fff;
+  background-color: var(--card);
+  color: var(--text);
+  border: 1px solid var(--muted);
   transition: background-color 0.2s ease;
+  text-align: left;
 }
 
-#entrada {
-  background-color: #28a745;
-}
-
-#salida-colacion {
-  background-color: #ffc107;
+#botonera-lateral button:hover {
+  background-color: var(--accent);
   color: #000;
 }
 
-#entrada-colacion {
-  background-color: #17a2b8;
+/* Contenido central */
+#contenido-central {
+  flex: 1;
+  max-width: 680px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
 }
 
-#salida-turno {
-  background-color: #dc3545;
+#logo-section img {
+  max-width: 140px;
+  margin-bottom: 1rem;
+  filter: brightness(1.2);
 }
 
-#buttons button:hover:not(:disabled) {
-  opacity: 0.9;
+#bienvenida {
+  margin-top: 1rem;
+  margin-bottom: 2rem;
+  animation: fadeUp 1.5s ease-out;
 }
+
+#saludo {
+  font-size: 1.8rem;
+  color: var(--accent);
+  margin-bottom: 0.5rem;
+}
+
+#frase-motivadora {
+  font-size: 1rem;
+  color: #aaa;
+  margin: 0.3rem 0;
+  opacity: 0;
+  animation: fraseAlza 1s ease-out forwards;
+}
+
+#clock-section {
+  margin-bottom: 2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+#clock {
+  font-size: 3.5rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+}
+
+#date {
+  font-size: 1rem;
+  color: var(--muted);
+  margin-bottom: 2rem;
+}
+
+#contador-section,
+#total-section {
+  margin: 1rem 0;
+  width: 100%;
+  max-width: 400px;
+}
+
+#contador,
+#total {
+  font-size: 2rem;
+  font-weight: 600;
+  background-color: var(--card);
+  color: var(--accent);
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+}
+
+#marca-section {
+  margin-top: 3rem; /* antes: 2rem */
+  padding-top: 1rem;
+  border-top: 1px solid rgba(255,255,255,0.1); /* línea sutil opcional */
+  width: 100%;
+  max-width: 600px;
+}
+
 
 #registro {
   list-style: none;
   padding: 0;
   margin-top: 1rem;
+  font-size: 0.95rem;
+  color: var(--text);
+  text-align: left;
+}
+
+.marca-item {
+  background: var(--card);
+  padding: 0.6rem 1rem;
+  margin-bottom: 0.5rem;
+  border-radius: 6px;
+  border: 1px solid #333;
+}
+
+/* Botón de cerrar sesión */
+
+#logout-section {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  z-index: 1000;
+}
+
+#btn-logout {
+  position: fixed;
+  top: 20px;
+  left: 20px;
+  z-index: 1000;
+  padding: 0.6rem 1rem;
   font-size: 1rem;
-  color: #444;
+  border: none;
+  border-radius: 6px;
+  background-color: var(--accent);
+  color: #000;
+  cursor: pointer;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+  transition: background-color 0.2s ease;
+}
+
+#btn-logout:hover {
+  background-color: #d10643;
+}
+
+
+/* Calendario lateral */
+#toggle-menu {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  z-index: 1000;
+  padding: 0.6rem 1rem;
+  font-size: 1rem;
+  border: none;
+  border-radius: 6px;
+  background-color: var(--accent);
+  color: #000;
+  cursor: pointer;
+}
+
+#side-menu {
+  position: fixed;
+  top: 0;
+  right: -320px;
+  width: 300px;
+  height: 100%;
+  background-color: var(--card);
+  box-shadow: -2px 0 8px rgba(0,0,0,0.3);
+  transition: right 0.3s ease;
+  z-index: 999;
+  padding: 1rem;
+  overflow-y: auto;
+  color: var(--text);
+}
+
+#side-menu.active {
+  right: 0;
+}
+
+.menu-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+#close-menu {
+  background: none;
+  border: none;
+  font-size: 1.2rem;
+  color: var(--text);
+  cursor: pointer;
+}
+
+#calendar {
+  width: 100%;
+  padding: 0.5rem;
+  font-size: 1rem;
+  margin-bottom: 1rem;
+  border: none;
+  border-radius: 6px;
+  background-color: #fff;
+  color: #000;
+}
+
+#marcas-dia {
+  font-size: 0.9rem;
+}
+
+/* Animaciones */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fraseAlza {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* Pantalla de bienvenida al iniciar sesión */
+#bienvenida-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: var(--bg);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+  transition: opacity 1.5s ease-out, visibility 1.5s ease-out;
+}
+
+.bienvenida-text {
+  font-size: 3rem;
+  font-weight: 600;
+  color: var(--accent);
+  animation: fadeInBienvenida 1s ease-in forwards;
+}
+
+@keyframes fadeInBienvenida {
+  from { opacity: 0; transform: scale(0.8); }
+  to   { opacity: 1; transform: scale(1); }
+}
+
+/* Animación de despedida al cerrar sesión */
+.overlay-despedida {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: var(--bg);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 1.5s ease-out, visibility 1.5s ease-out;
+}
+
+.overlay-despedida.active {
+  opacity: 1;
+  visibility: visible;
+}
+
+.despedida-text {
+  font-size: 2.5rem;
+  font-weight: 600;
+  color: var(--accent);
+  animation: fadeInDespedida 1s ease-in forwards;
+}
+
+@keyframes fadeInDespedida {
+  from { opacity: 0; transform: scale(0.8); }
+  to   { opacity: 1; transform: scale(1); }
+}
+
+/* Responsive */
+@media screen and (max-width: 768px) {
+  .container {
+    flex-direction: column;
+    align-items: center;
+    padding: 1rem;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  #botonera-lateral {
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    position: static;
+    margin-bottom: 1rem;
+    padding-top: 0;
+  }
+
+  #botonera-lateral button {
+    width: auto;
+    text-align: center;
+  }
+
+  #contenido-central {
+    width: 100%;
+    margin: 0 auto;
+  }
+
+  #clock {
+    font-size: 2.5rem;
+  }
+
+  #contador,
+  #total {
+    font-size: 1.5rem;
+    padding: 0.4rem 0.8rem;
+  }
+
+  #saludo {
+    font-size: 1.4rem;
+  }
+
+  #frase-motivadora {
+    font-size: 0.95rem;
+  }
+
+  #side-menu {
+    width: 100%;
+    right: -100%;
+  }
+
+  #side-menu.active {
+    right: 0;
+  }
 }

@@ -7,10 +7,10 @@
   padding: 0;
 }
 
-/* 2. Fondo degradado y centrado del body */
+/* 2. Fondo negro y centrado del body */
 body {
   font-family: 'Montserrat', Arial, sans-serif;
-  background: linear-gradient(120deg, #6a11cb 0%, #2575fc 100%);
+  background-color: #0c0c0c; /* Negro profundo */
   min-height: 100vh;
   display: flex;
   justify-content: center;
@@ -30,12 +30,12 @@ body {
   padding: 20px;
 }
 
-/* 4. Tarjeta de login (blanco semitransparente 95% opaco) */
+/* 4. Tarjeta de login (blanco semitransparente 90% opaco) */
 .login-card {
-  background-color: rgba(255, 255, 255, 0.95);
+  background-color: rgba(255, 255, 255, 0.90);
   border-radius: 18px;
   padding: 40px 30px;
-  box-shadow: 0 8px 32px rgba(44, 62, 80, 0.18);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4); /* Sombra más oscura */
   text-align: center;
   animation: popIn 0.8s cubic-bezier(.68, -0.55, .27, 1.55);
 }
@@ -51,9 +51,9 @@ body {
   }
 }
 
-/* 5. Contenedor del logo, con mismo fondo semitransparente */
+/* 5. Contenedor del logo */
 .logo-container {
-  background-color: rgba(255, 255, 255, 0.95);
+  background-color: rgba(255, 255, 255, 0.90);
   border-radius: 12px;
   padding: 0.5rem 1rem;
   display: inline-block;
@@ -77,14 +77,14 @@ body {
 .input-group label {
   display: block;
   margin-bottom: 8px;
-  color: #444;
+  color: #333;
   font-weight: 600;
 }
 
 .input-group input {
   width: 100%;
   padding: 12px;
-  border: 1px solid #e0e0e0;
+  border: 1px solid #ccc;
   border-radius: 8px;
   background: #f7f9fa;
   font-size: 15px;

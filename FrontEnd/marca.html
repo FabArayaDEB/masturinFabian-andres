@@ -2,36 +2,93 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <title>Gestión de Marcas</title>
+  <title>MasturinTimer</title>
   <link rel="stylesheet" href="css/marca.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
 </head>
 <body>
+
+  <!-- Pantalla de bienvenida animada -->
+  <div id="bienvenida-overlay">
+    <h1 class="bienvenida-text">¡Bienvenido!</h1>
+  </div>
+
+  <!-- Pantalla de despedida animada -->
+  <div id="despedida-overlay" class="overlay-despedida">
+    <h1 class="despedida-text">Nos vemos en otra ocasión</h1>
+  </div>
+
+  <!-- Botonera lateral derecha -->
   <div class="container">
-    <div id="logo-section">
-      <img src="images/logo-masturintimer.png" alt="Logo Masturi">
+    <div id="logout-section">
+      <button id="btn-logout">🔒 Cerrar Sesión</button>
     </div>
 
-    <div id="clock-section">
-      <div id="clock">00:00:00</div>
-      <div id="date">--/--/----</div>
-      <div id="contador-section">
-        <h3>Contador activo</h3>
-        <div id="contador">00:00:00</div>
+    <div class="container">
+      <!-- Botonera lateral izquierda -->
+      <div id="botonera-lateral">
+        <h2 id="titulo-marcas">Registro de Marcas</h2>
+        <button id="btn-entrada">🟢 Entrada</button>
+        <button id="btn-salida-colacion">🍽️ Salida a colación</button>
+        <button id="btn-entrada-colacion">🔙 Entrada de colación</button>
+        <button id="btn-salida-final">🔴 Salida del turno</button>
+        <button id="btn-exportar">📤 Exportar CSV</button>
       </div>
-    </div>
 
-    <div id="marca-section">
-      <h2>Registro de Marcas</h2>
-      <div id="buttons">
-        <button id="entrada">Entrada</button>
-        <button id="salida-colacion">Salida a colación</button>
-        <button id="entrada-colacion">Entrada de colación</button>
-        <button id="salida-turno">Salida del turno</button>
+      <!-- Contenido principal centrado -->
+      <div id="contenido-central">
+        <div id="logo-section">
+          <img src="images/logo-masturintimer.png" alt="Logo MasturinTimer">
+          <div id="bienvenida">
+            <h1 id="saludo">¡Bienvenido!</h1>
+            <p id="frase-motivadora" class="frase"></p>
+          </div>
+        </div>
+
+        <div id="clock-section">
+          <div id="clock">00:00:00</div>
+          <div id="date">--/--/----</div>
+
+          <div id="contador-section">
+            <h3>Contador activo</h3>
+            <div id="contador">00:00:00</div>
+          </div>
+
+          <div id="total-section">
+            <h3>Total trabajado</h3>
+            <div id="total">00:00:00</div>
+          </div>
+        </div>
+
+        <div id="marca-section">
+          <ul id="registro"></ul>
+        </div>
       </div>
-      <ul id="registro"></ul>
     </div>
   </div>
 
+  <button id="toggle-menu">📅 Calendario</button>
+
+  <div id="side-menu">
+    <div class="menu-header">
+      <h3>Calendario</h3>
+      <button id="close-menu">✖</button>
+    </div>
+    <input type="text" id="calendar" placeholder="Selecciona una fecha">
+    <div id="marcas-dia"></div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
   <script src="js/marca.js"></script>
+  <script>
+    // 🎬 Animación de bienvenida al cargar
+    window.addEventListener('load', () => {
+      const overlay = document.getElementById('bienvenida-overlay');
+      setTimeout(() => {
+        overlay.style.opacity = '0';
+        overlay.style.visibility = 'hidden';
+      }, 2000);
+    });
+  </script>
 </body>
 </html>
