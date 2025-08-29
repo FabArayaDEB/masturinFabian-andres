@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contacto | Correo</title>
+    <link rel="stylesheet" href="css/contacto.css">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <!-- Elementos decorativos de fondo -->
+    <div class="bg-decoration bg-circle-1"></div>
+    <div class="bg-decoration bg-circle-2"></div>
+    <div class="bg-decoration bg-circle-3"></div>
+
+    <header class="main-header" id="main-header">
+        <nav class="navbar" aria-label="Navegación principal">
+            <a href="contacto.html" class="logo" aria-label="Inicio">
+                <i class="fas fa-shield-alt"></i>
+                <span>SOPORTE Y PRIVACIDAD</span>
+            </a>
+            <button class="nav-toggle" aria-label="Abrir menú" aria-expanded="false" aria-controls="nav-menu">
+                <span class="hamburger"></span>
+            </button>
+            <ul class="nav-menu" id="nav-menu">
+                <li><a href="index.html"><i class="fas fa-home"></i> Inicio</a></li>
+            </ul>
+        </nav>
+    </header>
+    
+    <main>
+        <section class="contact-form-section">
+            <h2>Envíame un mensaje</h2>
+            <form action="https://formsubmit.co/kevinnotfound23@gmail.com" method="POST" id="contact-form">
+                <input type="hidden" name="_subject" value="Nuevo mensaje desde el formulario de contacto">
+                <input type="hidden" name="_template" value="table">
+                <input type="hidden" name="_captcha" value="false">
+                <input type="hidden" name="_next" value="http://127.0.0.1:5500/FrontEnd/gracias.html">
+                <input type="hidden" name="_autoresponse" value="Hemos recibido tu mensaje. Te contactaremos pronto.">
+                
+                <div class="form-group">
+                    <label for="nombre"><i class="fas fa-user"></i> Nombre</label>
+                    <input type="text" id="nombre" name="name" required aria-required="true" autocomplete="name">
+                    <span class="error-message"></span>
+                </div>
+                <div class="form-group">
+                    <label for="email"><i class="fas fa-envelope"></i> Correo electrónico</label>
+                    <input type="email" id="email" name="email" required aria-required="true" autocomplete="email">
+                    <span class="error-message"></span>
+                </div>
+                <div class="form-group">
+                    <label for="asunto"><i class="fas fa-tag"></i> Asunto</label>
+                    <input type="text" id="asunto" name="_subject" required aria-required="true" autocomplete="off">
+                    <span class="error-message"></span>
+                </div>
+                <div class="form-group">
+                    <label for="mensaje"><i class="fas fa-comment"></i> Mensaje</label>
+                    <textarea id="mensaje" name="message" rows="5" required aria-required="true"></textarea>
+                    <span class="error-message"></span>
+                </div>
+                <button type="submit" class="btn-primary">
+                    <i class="fas fa-paper-plane"></i> Enviar mensaje
+                </button>
+                <div class="form-success" style="display:none;">
+                    <i class="fas fa-check-circle"></i> ¡Mensaje enviado correctamente!
+                </div>
+            </form>
+        </section>
+    </main>
+    
+    <footer class="main-footer">
+        <p>&copy; 2025 MasturinTimer. Todos los derechos reservados.</p>
+    </footer>
+
+    <script src="JS/contacto.js"></script>
+</body>
+</html>

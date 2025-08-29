@@ -1,0 +1,345 @@
+/* Variables de colores */
+:root {
+    --color-primary: #4e6fae;
+    --color-secondary: #ff7e5f;
+    --color-gradient: linear-gradient(135deg, #ff7e5f 0%, #feb47b 100%);
+    --color-white: #ffffff;
+    --color-dark: #2e3a59;
+    --color-light-bg: #f7f9fc;
+    --color-success: #2ecc71;
+    --color-shadow: rgba(44, 62, 80, 0.15);
+}
+
+/* Estilos generales */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Montserrat', Arial, sans-serif;
+    background: var(--color-light-bg);
+    color: var(--color-dark);
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow-x: hidden;
+}
+
+.container {
+    width: 100%;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 2rem;
+    position: relative;
+}
+
+/* Confetti animation */
+.confetti {
+    position: absolute;
+    width: 10px;
+    height: 10px;
+    background: var(--color-secondary);
+    opacity: 0;
+    animation: confetti-fall 5s linear infinite;
+}
+
+.confetti:nth-child(1) {
+    left: 10%;
+    animation-delay: 0s;
+    background: #FF5E5E;
+}
+
+.confetti:nth-child(2) {
+    left: 20%;
+    animation-delay: 1s;
+    background: #4EA5FF;
+}
+
+.confetti:nth-child(3) {
+    left: 30%;
+    animation-delay: 2s;
+    background: #FFE74C;
+}
+
+.confetti:nth-child(4) {
+    left: 40%;
+    animation-delay: 3s;
+    background: #6BF178;
+}
+
+.confetti:nth-child(5) {
+    left: 50%;
+    animation-delay: 4s;
+    background: #FF5E5E;
+}
+
+.confetti:nth-child(6) {
+    left: 60%;
+    animation-delay: 0.5s;
+    background: #9B5DE5;
+}
+
+.confetti:nth-child(7) {
+    left: 70%;
+    animation-delay: 1.5s;
+    background: #00BBF9;
+}
+
+.confetti:nth-child(8) {
+    left: 80%;
+    animation-delay: 2.5s;
+    background: #F15BB5;
+}
+
+.confetti:nth-child(9) {
+    left: 90%;
+    animation-delay: 3.5s;
+    background: #FEE440;
+}
+
+.confetti:nth-child(10) {
+    left: 95%;
+    animation-delay: 4.5s;
+    background: #00F5D4;
+}
+
+/* Card styles */
+.card {
+    background: var(--color-white);
+    border-radius: 20px;
+    box-shadow: 0 15px 40px var(--color-shadow);
+    padding: 3rem;
+    text-align: center;
+    max-width: 500px;
+    width: 100%;
+    position: relative;
+    z-index: 10;
+    animation: card-appear 0.8s ease-out forwards;
+    transform: translateY(20px);
+    opacity: 0;
+}
+
+/* Checkmark animation */
+.checkmark-container {
+    margin: 0 auto 1.5rem;
+    width: 80px;
+    height: 80px;
+}
+
+.checkmark {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    display: block;
+    stroke-width: 4;
+    stroke: var(--color-white);
+    stroke-miterlimit: 10;
+    box-shadow: 0 0 20px rgba(46, 204, 113, 0.3);
+    animation: fill-checkmark 0.4s ease-in-out 0.4s forwards, scale-checkmark 0.3s ease-in-out 0.9s both;
+}
+
+.checkmark__circle {
+    stroke-dasharray: 166;
+    stroke-dashoffset: 166;
+    stroke-width: 4;
+    stroke-miterlimit: 10;
+    stroke: var(--color-success);
+    fill: none;
+    animation: stroke-checkmark 0.6s cubic-bezier(0.65, 0, 0.45, 1) forwards;
+}
+
+.checkmark__check {
+    transform-origin: 50% 50%;
+    stroke-dasharray: 48;
+    stroke-dashoffset: 48;
+    animation: stroke-checkmark 0.3s cubic-bezier(0.65, 0, 0.45, 1) 0.8s forwards;
+}
+
+/* Text styles */
+h1 {
+    font-size: 2.2rem;
+    color: var(--color-dark);
+    margin-bottom: 1rem;
+    font-weight: 700;
+}
+
+.message {
+    font-size: 1.1rem;
+    color: #666;
+    margin-bottom: 0.5rem;
+    line-height: 1.6;
+}
+
+.thanks {
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: var(--color-primary);
+    margin-bottom: 2rem;
+}
+
+/* Button styles */
+.home-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--color-gradient);
+    color: var(--color-white);
+    text-decoration: none;
+    padding: 1rem 2rem;
+    border-radius: 50px;
+    font-weight: 600;
+    font-size: 1.1rem;
+    box-shadow: 0 5px 15px rgba(255, 126, 95, 0.4);
+    transition: all 0.3s ease;
+    margin: 1.5rem 0;
+}
+
+.home-button:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 20px rgba(255, 126, 95, 0.5);
+}
+
+.home-button:active {
+    transform: translateY(1px);
+}
+
+.home-button i {
+    margin-right: 0.7rem;
+}
+
+/* Social links */
+.social-links {
+    margin-top: 2rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid #eee;
+}
+
+.social-links p {
+    margin-bottom: 1rem;
+    color: #777;
+}
+
+.social-icons {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+}
+
+.social-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: #f5f5f5;
+    color: var(--color-dark);
+    text-decoration: none;
+    transition: all 0.3s ease;
+}
+
+.social-icon:hover {
+    background: var(--color-gradient);
+    color: var(--color-white);
+    transform: translateY(-3px);
+}
+
+/* Footer */
+.footer {
+    margin-top: 2rem;
+    text-align: center;
+    color: #888;
+    font-size: 0.9rem;
+}
+
+/* Animations */
+@keyframes confetti-fall {
+    0% {
+        opacity: 1;
+        top: -10%;
+        transform: rotate(0deg);
+    }
+    100% {
+        opacity: 0;
+        top: 100%;
+        transform: rotate(720deg);
+    }
+}
+
+@keyframes card-appear {
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes stroke-checkmark {
+    100% {
+        stroke-dashoffset: 0;
+    }
+}
+
+@keyframes scale-checkmark {
+    0%, 100% {
+        transform: none;
+    }
+    50% {
+        transform: scale3d(1.1, 1.1, 1);
+    }
+}
+
+@keyframes fill-checkmark {
+    100% {
+        box-shadow: 0 0 20px rgba(46, 204, 113, 0.5);
+    }
+}
+
+/* Responsive design */
+@media (max-width: 600px) {
+    .card {
+        padding: 2rem 1.5rem;
+    }
+    
+    h1 {
+        font-size: 1.8rem;
+    }
+    
+    .message {
+        font-size: 1rem;
+    }
+    
+    .home-button {
+        padding: 0.9rem 1.8rem;
+        font-size: 1rem;
+    }
+}
+
+@media (max-width: 400px) {
+    .container {
+        padding: 1rem;
+    }
+    
+    .card {
+        padding: 1.5rem 1rem;
+    }
+    
+    h1 {
+        font-size: 1.6rem;
+    }
+    
+    .checkmark-container {
+        width: 70px;
+        height: 70px;
+    }
+    
+    .checkmark {
+        width: 70px;
+        height: 70px;
+    }
+}

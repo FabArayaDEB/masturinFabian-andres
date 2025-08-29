@@ -2,54 +2,163 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Panel Administrador</title>
   <link rel="stylesheet" href="css/admin.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
-  <div class="container">
+  <div class="admin-container">
+    <!-- Header -->
+    <header class="admin-header">
+      <div class="header-content">
+        <h1><i class="fas fa-cogs"></i> Panel de Administración</h1>
+        <div class="user-info">
+          <span id="admin-info"></span>
+          <!-- Botón de modo oscuro/claro -->
+          <button id="toggle-theme-btn" class="theme-toggle-btn" title="Cambiar tema">
+            <i class="fas fa-moon"></i>
+          </button>
+          <a href="index.html" class="logout-btn">
+            <i class="fas fa-sign-out-alt"></i> Cerrar Sesión
+          </a>
+        </div>
+      </div>
+    </header>
 
-    <!-- 🔀 Navegación -->
-    <nav class="nav-tabs">
-      <button onclick="mostrarPanel('usuarios')">Gestionar Usuarios</button>
-      <button onclick="mostrarPanel('reportes')">Reportes</button>
-    </nav>
+    <!-- Main Content -->
+    <div class="admin-main">
+      <!-- Sidebar Navigation -->
+      <aside class="admin-sidebar">
+        <nav class="sidebar-nav">
+          <button class="nav-btn active" onclick="mostrarPanel('usuarios')">
+            <i class="fas fa-users"></i> Gestionar Usuarios
+          </button>
+          <button class="nav-btn" onclick="mostrarPanel('reportes')">
+            <i class="fas fa-chart-bar"></i> Reportes
+          </button>
+        </nav>
+      </aside>
 
-    <!-- 👥 Panel de Gestión de Usuarios -->
-    <section id="panel-usuarios" class="panel">
-      <h2>Crear Usuario</h2>
-      <form id="usuario-form">
-        <input type="text" id="rut" placeholder="RUT" required>
-        <input type="email" id="correo" placeholder="Correo" required>
-        <input type="password" id="contraseña" placeholder="Contraseña" required>
-        <select id="rol">
-          <option value="trabajador">Trabajador</option>
-          <option value="admin">Administrador</option>
-        </select>
+      <!-- Content Area -->
+      <main class="admin-content">
+        <!-- 👥 Panel de Gestión de Usuarios -->
+        <section id="panel-usuarios" class="panel">
+          <div class="panel-header">
+            <h2><i class="fas fa-user-plus"></i> Crear Usuario</h2>
+          </div>
+          
+          <form id="usuario-form" class="admin-form">
+            <div class="form-grid">
+              <div class="form-group">
+                <label for="rut"><i class="fas fa-id-card"></i> RUT</label>
+                <input type="text" id="rut" placeholder="Ingrese RUT" required>
+              </div>
+              
+              <div class="form-group">
+                <label for="correo"><i class="fas fa-envelope"></i> Correo</label>
+                <input type="email" id="correo" placeholder="Ingrese correo electrónico" required>
+              </div>
+              
+              <div class="form-group">
+                <label for="contraseña"><i class="fas fa-lock"></i> Contraseña</label>
+                <input type="password" id="contraseña" placeholder="Ingrese contraseña" required>
+              </div>
+              
+              <div class="form-group">
+                <label for="rol"><i class="fas fa-user-tag"></i> Rol</label>
+                <select id="rol">
+                  <option value="trabajador">Trabajador</option>
+                  <option value="admin">Administrador</option>
+                </select>
+              </div>
+            </div>
+            
+            <div class="form-section">
+              <h3><i class="fas fa-file-contract"></i> Contrato</h3>
+              <div class="form-grid">
+                <div class="form-group">
+                  <label for="fecha_inicio"><i class="fas fa-calendar-start"></i> Fecha Inicio</label>
+                  <input type="date" id="fecha_inicio" required>
+                </div>
+                
+                <div class="form-group">
+                  <label for="fecha_fin"><i class="fas fa-calendar-times"></i> Fecha Fin</label>
+                  <input type="date" id="fecha_fin" required>
+                </div>
+                
+                <div class="form-group">
+                  <label for="cargo"><i class="fas fa-briefcase"></i> Cargo</label>
+                  <input type="text" id="cargo" placeholder="Ingrese cargo" required>
+                </div>
+                
+                <div class="form-group">
+                  <label for="sueldo"><i class="fas fa-money-bill-wave"></i> Sueldo</label>
+                  <input type="number" id="sueldo" placeholder="Ingrese sueldo" required>
+                </div>
+                
+                <div class="form-group">
+                  <label for="tipo_contrato"><i class="fas fa-file-signature"></i> Tipo de Contrato</label>
+                  <select id="tipo_contrato">
+                    <option value="indefinido">Indefinido</option>
+                    <option value="plazo fijo">Plazo Fijo</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+            
+            <button type="submit" class="submit-btn">
+              <i class="fas fa-save"></i> Guardar Usuario
+            </button>
+          </form>
 
-        <h3>Contrato</h3>
-        <input type="date" id="fecha_inicio" placeholder="Inicio" required>
-        <input type="date" id="fecha_fin" placeholder="Fin" required>
-        <input type="text" id="cargo" placeholder="Cargo" required>
-        <input type="number" id="sueldo" placeholder="Sueldo" required>
-        <select id="tipo_contrato">
-          <option value="indefinido">Indefinido</option>
-          <option value="plazo fijo">Plazo Fijo</option>
-        </select>
+          <div class="panel-header">
+            <h2><i class="fas fa-list-alt"></i> Usuarios Registrados</h2>
+          </div>
+          <div id="usuarios-table" class="table-container"></div>
+        </section>
 
-        <button type="submit">Crear Usuario</button>
-      </form>
+        <!-- 📊 Panel de Reportes -->
+        <section id="panel-reportes" class="panel hidden">
+          <div class="panel-header">
+            <h2><i class="fas fa-chart-bar"></i> Reportes de Asistencia</h2>
+          </div>
 
-      <h3>Usuarios Registrados</h3>
-      <div id="usuarios-table"></div>
-    </section>
+          <div class="filtros-reportes card">
+            <h3><i class="fas fa-filter"></i> Filtros</h3>
+            <div class="filter-grid">
+              <div class="form-group">
+                <label for="tipo-reporte">Tipo de Reporte:</label>
+                <select id="tipo-reporte">
+                  <option value="todos">Todos</option>
+                  <option value="atraso">Atraso</option>
+                  <option value="salida anticipada">Salida anticipada</option>
+                  <option value="inasistencia">Inasistencia</option>
+                </select>
+              </div>
 
-    <!-- 📊 Panel de Reportes (por ahora vacío) -->
-    <section id="panel-reportes" class="panel hidden">
-      <h2>Reportes de Asistencia</h2>
-      <p>Esta sección se activará cuando los trabajadores comiencen a registrar sus marcas.</p>
-    </section>
+              <div class="form-group">
+                <label for="fecha-inicio-reporte">Desde:</label>
+                <input type="date" id="fecha-inicio-reporte">
+              </div>
+
+              <div class="form-group">
+                <label for="fecha-fin-reporte">Hasta:</label>
+                <input type="date" id="fecha-fin-reporte">
+              </div>
+            </div>
+            
+            <button onclick="filtrarReportes()" class="filter-btn">
+              <i class="fas fa-search"></i> Filtrar Reportes
+            </button>
+          </div>
+
+          <div id="tabla-reportes" class="table-container"></div>
+        </section>
+      </main>
+    </div>
   </div>
-  <button href="index.html">cerrar sesion</button>
+
   <script src="js/admin.js"></script>
 </body>
 </html>

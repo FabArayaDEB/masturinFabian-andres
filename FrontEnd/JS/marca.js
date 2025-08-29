@@ -67,7 +67,42 @@ document.addEventListener('DOMContentLoaded', () => {
     const hora = clockEl.textContent;
     const fechaCompleta = dateEl.textContent;
     const fechaISO = new Date().toLocaleDateString('sv-SE');
-    const texto = `${tipo}: ${fechaCompleta} - ${hora}${extra ? ` (${extra})` : ''}`;
+
+    const [hStr, mStr] = hora.split(':');
+    const horaActual = new Date();
+    horaActual.setHours(parseInt(hStr));
+    horaActual.setMinutes(parseInt(mStr));
+
+    let clasificacion = '';
+
+    if (tipo.includes('Entrada') && !tipo.includes('colación')) {
+      const limiteNormal = new Date(horaActual);
+      limiteNormal.setHours(9, 30, 0);
+
+      if (horaActual <= limiteNormal) {
+        clasificacion = 'Marcaje normal';
+      } else {
+        clasificacion = '⏰ Atraso';
+      }
+    }
+
+    if (tipo.includes('Salida') && tipo.includes('Fin')) {
+      const salidaAnticipada = new Date(horaActual);
+      salidaAnticipada.setHours(17, 30, 0);
+
+      const horaExtra = new Date(horaActual);
+      horaExtra.setHours(18, 30, 0);
+
+      if (horaActual < salidaAnticipada) {
+        clasificacion = '🚪 Salida anticipada';
+      } else if (horaActual >= salidaAnticipada && horaActual <= horaExtra) {
+        clasificacion = '✅ Salida normal';
+      } else {
+        clasificacion = '💼 Horas extras';
+      }
+    }
+
+    const texto = `${tipo}: ${fechaCompleta} - ${hora}${clasificacion ? ` [${clasificacion}]` : ''}${extra ? ` (${extra})` : ''}`;
 
     if (!historialPorFecha[fechaISO]) {
       historialPorFecha[fechaISO] = [];
@@ -215,25 +250,24 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   btnLogout.addEventListener('click', () => {
-  const nombreUsuario = localStorage.getItem('userEmail') || 'usuario';
-  const confirmar = window.confirm(`¿Estás seguro que quieres salir, ${nombreUsuario}?`);
-  if (confirmar) {
-    const despedida = document.getElementById('despedida-overlay');
-    if (despedida) {
-      despedida.classList.add('active');
-      setTimeout(() => {
+    const nombreUsuario = localStorage.getItem('userEmail') || 'usuario';
+    const confirmar = window.confirm(`¿Estás seguro que quieres salir, ${nombreUsuario}?`);
+    if (confirmar) {
+      const despedida = document.getElementById('despedida-overlay');
+      if (despedida) {
+        despedida.classList.add('active');
+        setTimeout(() => {
+          localStorage.clear();
+          window.location.href = 'index.html';
+        }, 2500);
+      } else {
         localStorage.clear();
         window.location.href = 'index.html';
-      }, 2500); // Tiempo para mostrar el mensaje antes de redirigir
-    } else {
-      // Fallback por si no existe el overlay
-      localStorage.clear();
-      window.location.href = 'index.html';
+      }
     }
-  }
-});
+  });
 
-// ⏱ Inicialización
+  // ⏱ Inicialización
   setInterval(updateClock, 1000);
   updateClock();
   contadorEl.textContent = '00:00:00';
