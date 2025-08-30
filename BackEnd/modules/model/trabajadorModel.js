@@ -43,14 +43,18 @@ class TrabajadorModel {
                         return db.rollback(() => callback(err));
                     }
 
-                    const queryContrato = 'INSERT INTO contratos (rut, fecha_inicio, fecha_fin, cargo, sueldo, tipo_contrato) VALUES (?, ?, ?, ?, ?, ?)';
+                    const queryContrato = 'INSERT INTO contratos (rut, fecha_inicio, fecha_fin, cargo, sueldo, tipo_contrato, hora_entrada, hora_salida, hora_entrada_colacion, hora_salida_colacion) VALUES (?, ?, ?, ?, ?, ?)';
                     db.query(queryContrato, [
                         trabajador.rut,
                         trabajador.fecha_inicio,
                         trabajador.fecha_fin || null,
                         trabajador.cargo,
                         trabajador.sueldo,
-                        trabajador.tipo_contrato
+                        trabajador.tipo_contrato,
+                        trabajador.hora_entrada, 
+                        trabajador.hora_salida,
+                        trabajador.hora_entrada_colacion,
+                        trabajador.hora_salida_colacion
                     ], (err) => {
                         if (err) {
                             return db.rollback(() => callback(err));
@@ -97,13 +101,17 @@ class TrabajadorModel {
                     return db.rollback(() => callback(new Error('Trabajador no encontrado')));
                 }
 
-                const queryContrato = 'UPDATE contratos SET fecha_inicio = ?, fecha_fin = ?, cargo = ?, sueldo = ?, tipo_contrato = ? WHERE rut = ? AND estado = "activo"';
+                const queryContrato = 'UPDATE contratos SET fecha_inicio = ?, fecha_fin = ?, cargo = ?, sueldo = ?, tipo_contrato = ?, hora_entrada = ?, hora_salida = ?, hora_entrada_colacion = ?, hora_salida_colacion = ? WHERE rut = ? AND estado = "activo"';
                 db.query(queryContrato, [
                     trabajador.fecha_inicio,
                     trabajador.fecha_fin || null,
                     trabajador.cargo,
                     trabajador.sueldo,
                     trabajador.tipo_contrato,
+                    trabajador.hora_entrada,
+                    trabajador.hora_salida,
+                    trabajador.hora_entrada_colacion,
+                    trabajador.hora_salida_colacion,
                     rut
                 ], (err) => {
                     if (err) {
@@ -135,13 +143,17 @@ class TrabajadorModel {
                     return db.rollback(() => callback(new Error('Trabajador no encontrado')));
                 }
 
-                const queryContrato = 'UPDATE contratos SET fecha_inicio = ?, fecha_fin = ?, cargo = ?, sueldo = ?, tipo_contrato = ? WHERE rut = ? AND estado = "activo"';
+                const queryContrato = 'UPDATE contratos SET fecha_inicio = ?, fecha_fin = ?, cargo = ?, sueldo = ?, tipo_contrato = ?, hora_entrada = ?, hora_salida = ?, hora_entrada_colacion = ?, hora_salida_colacion = ? WHERE rut = ? AND estado = "activo"';
                 db.query(queryContrato, [
                     trabajador.fecha_inicio,
                     trabajador.fecha_fin || null,
                     trabajador.cargo,
                     trabajador.sueldo,
                     trabajador.tipo_contrato,
+                    trabajador.hora_entrada,
+                    trabajador.hora_salida,
+                    trabajador.hora_entrada_colacion,
+                    trabajador.hora_salida_colacion,
                     rut
                 ], (err) => {
                     if (err) {
