@@ -58,7 +58,7 @@ npm install
 #### Backend (Terminal 1)
 ```bash
 cd BackEnd
-npm start
+node app.js
 ```
 
 #### Frontend (Terminal 2)

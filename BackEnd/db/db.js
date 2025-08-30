@@ -38,19 +38,6 @@ const initDB = () => {
         if (err) console.error('Error creando tabla asistencias:', err);
     });
 
-    db.query(`CREATE TABLE IF NOT EXISTS reportes (
-        id INT PRIMARY KEY AUTO_INCREMENT,
-        rut VARCHAR(50) NOT NULL,
-        tipo ENUM('asistencia', 'atrasos', 'salidas anticipadas') NOT NULL,
-        fecha_inicio DATE NOT NULL,
-        fecha_fin DATE NOT NULL,
-        fecha_emision TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-        pdf VARCHAR(255),
-        FOREIGN KEY (rut) REFERENCES usuarios(rut)
-    );`, (err) => {
-        if (err) console.error('Error creando tabla reportes:', err);
-    });
-
     db.query(`CREATE TABLE IF NOT EXISTS contratos (
         id INT PRIMARY KEY AUTO_INCREMENT,
         rut VARCHAR(50) NOT NULL,

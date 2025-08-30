@@ -27,7 +27,6 @@ exports.getAtrasosColacion = (data, callback) => {
         if (err) return callback(err);
 
         if (!results || results.length === 0) return callback(new Error("No hay atrasos registrados en las fechas ingresadas"));
-        if (null) return callback(new Error("No hay "))
 
         const reporte = results.map(r => ({
             rut: r.rut,
