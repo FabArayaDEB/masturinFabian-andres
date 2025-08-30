@@ -1,7 +1,7 @@
 document.addEventListener("DOMContentLoaded", () => {
     const API = "http://localhost:3000";
     const loginForm = document.getElementById("login-form");
-    const buttonId = document.getElementById("button-id");
+    
 
     if(loginForm){
         loginForm.addEventListener("submit", e => {
@@ -30,6 +30,7 @@ document.addEventListener("DOMContentLoaded", () => {
             })
             .then((data) => {
                 localStorage.setItem("token", data.token);
+                window.location.href = "marca.html";
                 alert(data.mensaje);
             })
             .catch((err) => {
