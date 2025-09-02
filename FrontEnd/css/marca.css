@@ -17,6 +17,23 @@ body, html {
   color: var(--text);
 }
 
+/* Título principal */
+#titulo-principal {
+  width: 100%;
+  text-align: center;
+  margin-bottom: 1rem;
+  animation: fadeUp 1s ease-out;
+}
+
+#titulo-principal h1 {
+  font-size: 2rem;
+  font-weight: 600;
+  color: var(--accent);
+  text-shadow: 0 0 8px rgba(0,188,212,0.3);
+  margin: 0;
+}
+
+/* Layout principal */
 .container {
   display: flex;
   flex-direction: row;
@@ -25,7 +42,7 @@ body, html {
   gap: 1.5rem;
   padding: 2rem;
   max-width: 960px;
-  margin-left: 14vw;
+  margin-left: 9vw;
   margin-right: auto;
 }
 
@@ -51,26 +68,34 @@ body, html {
 }
 
 #botonera-lateral button {
-  padding: 0.6rem 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.8rem 1.2rem;
   font-size: 1rem;
   border: none;
-  border-radius: 6px;
-  background-color: var(--card);
+  border-radius: 10px;
+  background: linear-gradient(135deg, #2c2f36, #1e1f26);
   color: var(--text);
-  border: 1px solid var(--muted);
-  transition: background-color 0.2s ease;
-  text-align: left;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+  transition: all 0.3s ease;
 }
 
 #botonera-lateral button:hover {
   background-color: var(--accent);
   color: #000;
+  transform: translateY(-2px);
 }
 
 /* Contenido central */
 #contenido-central {
-  flex: 1;
-  max-width: 680px;
+  background: rgba(44, 47, 54, 0.6);
+  backdrop-filter: blur(8px);
+  border-radius: 20px;
+  padding: 2rem;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.3);
+  border: 1px solid rgba(255,255,255,0.05);
+  max-width: 720px;
   margin: 0 auto;
   display: flex;
   flex-direction: column;
@@ -78,18 +103,26 @@ body, html {
   text-align: center;
 }
 
-#logo-section img {
-  max-width: 140px;
-  margin-bottom: 1rem;
-  filter: brightness(1.2);
-}
-
-#bienvenida {
-  margin-top: 1rem;
+/* Logo */
+#logo-section {
+  position: relative;
   margin-bottom: 2rem;
-  animation: fadeUp 1.5s ease-out;
+  animation: logoFade 1.2s ease-out forwards;
 }
 
+#logo-section img {
+  max-width: 160px;
+  border-radius: 12px;
+  box-shadow: 0 0 20px rgba(0, 188, 212, 0.3);
+  transition: transform 0.3s ease;
+  filter: drop-shadow(0 0 6px rgba(0, 188, 212, 0.2));
+}
+
+#logo-section img:hover {
+  transform: scale(1.05);
+}
+
+/* Saludo y frase */
 #saludo {
   font-size: 1.8rem;
   color: var(--accent);
@@ -98,12 +131,16 @@ body, html {
 
 #frase-motivadora {
   font-size: 1rem;
-  color: #aaa;
+  color: var(--muted);
   margin: 0.3rem 0;
-  opacity: 0;
-  animation: fraseAlza 1s ease-out forwards;
+  white-space: nowrap;
+  overflow: hidden;
+  border-right: 2px solid var(--accent);
+  width: 0;
+  animation: typing 3s steps(40, end) forwards;
 }
 
+/* Reloj */
 #clock-section {
   margin-bottom: 2rem;
   display: flex;
@@ -112,9 +149,13 @@ body, html {
 }
 
 #clock {
-  font-size: 3.5rem;
+  font-size: 3.8rem;
   font-weight: 600;
-  margin-bottom: 0.5rem;
+  padding: 1rem 2rem;
+  border-radius: 16px;
+  background: linear-gradient(145deg, #262830, #1a1b21);
+  box-shadow: 6px 6px 12px #141518, -6px -6px 12px #2a2b32;
+  color: var(--accent);
 }
 
 #date {
@@ -123,6 +164,7 @@ body, html {
   margin-bottom: 2rem;
 }
 
+/* Contadores */
 #contador-section,
 #total-section {
   margin: 1rem 0;
@@ -141,14 +183,14 @@ body, html {
   box-shadow: 0 2px 6px rgba(0,0,0,0.2);
 }
 
+/* Registro de marcas */
 #marca-section {
-  margin-top: 3rem; /* antes: 2rem */
+  margin-top: 3rem;
   padding-top: 1rem;
-  border-top: 1px solid rgba(255,255,255,0.1); /* línea sutil opcional */
+  border-top: 1px solid rgba(255,255,255,0.1);
   width: 100%;
   max-width: 600px;
 }
-
 
 #registro {
   list-style: none;
@@ -161,57 +203,79 @@ body, html {
 
 .marca-item {
   background: var(--card);
-  padding: 0.6rem 1rem;
-  margin-bottom: 0.5rem;
-  border-radius: 6px;
-  border: 1px solid #333;
+  padding: 0.8rem 1.2rem;
+  margin-bottom: 0.6rem;
+  border-radius: 8px;
+  border: 1px solid rgba(255,255,255,0.05);
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  transition: transform 0.2s ease;
 }
 
-/* Botón de cerrar sesión */
-
-#logout-section {
-  position: absolute;
-  top: 20px;
-  left: 20px;
-  z-index: 1000;
+.marca-item::before {
+  content: '⏱️';
+  font-size: 1.2rem;
 }
 
-#btn-logout {
+.marca-item:hover {
+  transform: scale(1.02);
+}
+
+/* Botones superiores */
+#btn-logout,
+#toggle-menu {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
   position: fixed;
   top: 20px;
-  left: 20px;
   z-index: 1000;
-  padding: 0.6rem 1rem;
+  padding: 0.6rem 1.2rem;
   font-size: 1rem;
   border: none;
-  border-radius: 6px;
-  background-color: var(--accent);
+  border-radius: 10px;
+  background: linear-gradient(135deg, var(--accent), #00a0b5);
   color: #000;
   cursor: pointer;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.2);
-  transition: background-color 0.2s ease;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
-#btn-logout:hover {
-  background-color: #d10643;
+#btn-logout { left: 20px; }
+#toggle-menu { right: 20px; }
+
+#btn-logout:hover,
+#toggle-menu:hover {
+  transform: scale(1.05);
+  box-shadow: 0 6px 16px rgba(0,0,0,0.4);
 }
 
+/* Botón de configuración */
+#config-section {
+  position: fixed;
+  bottom: 20px;
+  left: 20px;
+  z-index: 1000;
+}
+
+#btn-config {
+  font-size: 1.5rem;
+  background-color: var(--card);
+  color: var(--accent);
+  border: none;
+  border-radius: 50%;
+  padding: 0.6rem;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+  transition: transform 0.2s ease;
+}
+
+#btn-config:hover {
+  transform: rotate(90deg);
+}
 
 /* Calendario lateral */
-#toggle-menu {
-  position: fixed;
-  top: 20px;
-  right: 20px;
-  z-index: 1000;
-  padding: 0.6rem 1rem;
-  font-size: 1rem;
-  border: none;
-  border-radius: 6px;
-  background-color: var(--accent);
-  color: #000;
-  cursor: pointer;
-}
-
 #side-menu {
   position: fixed;
   top: 0;
@@ -219,8 +283,9 @@ body, html {
   width: 300px;
   height: 100%;
   background-color: var(--card);
-  box-shadow: -2px 0 8px rgba(0,0,0,0.3);
-  transition: right 0.3s ease;
+  box-shadow: -2px 0 12px rgba(0,0,0,0.4);
+  border-left: 2px solid var(--accent);
+  transition: right 0.4s ease;
   z-index: 999;
   padding: 1rem;
   overflow-y: auto;
@@ -261,18 +326,200 @@ body, html {
   font-size: 0.9rem;
 }
 
-/* Animaciones */
-@keyframes fadeUp {
-  from { opacity: 0; transform: translateY(20px); }
-  to   { opacity: 1; transform: translateY(0); }
+/* Modal de configuración */
+#modal-config {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(30, 31, 38, 0.85);
+  backdrop-filter: blur(6px);
+  display: none;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
 }
 
-@keyframes fraseAlza {
-  from { opacity: 0; transform: translateY(10px); }
-  to   { opacity: 1; transform: translateY(0); }
+#modal-config.active {
+  display: flex;
 }
 
-/* Pantalla de bienvenida al iniciar sesión */
+.modal-contenido {
+  background-color: var(--card);
+  padding: 2rem;
+  border-radius: 12px;
+  text-align: left;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.4);
+  border: 1px solid rgba(255,255,255,0.05);
+  max-width: 500px;
+  color: var(--text);
+}
+
+/* Pestañas del modal */
+.config-tabs {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.tab-btn {
+  padding: 0.6rem 1rem;
+  font-size: 1rem;
+  font-weight: 500;
+  border: none;
+  border-radius: 12px;
+  background: rgba(0, 188, 212, 0.15);
+  color: var(--accent);
+  backdrop-filter: blur(6px);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+  transition: all 0.3s ease;
+  cursor: pointer;
+  position: relative;
+}
+
+.tab-btn:hover {
+  background: var(--accent);
+  color: #000;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 18px rgba(0,0,0,0.3);
+}
+
+.tab-btn.active {
+  background: var(--accent);
+  color: #000;
+  box-shadow: inset 0 0 0 2px #fff;
+}
+
+.tab-btn::before {
+  content: '';
+  position: absolute;
+  top: -6px;
+  right: -6px;
+  width: 8px;
+  height: 8px;
+  background-color: var(--accent);
+  border-radius: 50%;
+  animation: pulse 1.5s infinite;
+  display: none;
+}
+
+.tab-btn.active::before {
+  display: block;
+}
+
+@keyframes pulse {
+  0% { transform: scale(1); opacity: 1; }
+  50% { transform: scale(1.5); opacity: 0.5; }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+/* Contenido de pestañas */
+.tab-content {
+  display: none;
+  opacity: 0;
+  transform: translateY(10px);
+  transition: opacity 0.4s ease, transform 0.4s ease;
+}
+
+.tab-content.active {
+  display: block;
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Botones de tema */
+#modo-oscuro,
+#modo-claro {
+  padding: 0.6rem 1rem;
+  font-size: 1rem;
+  border: none;
+  border-radius: 10px;
+  background: linear-gradient(135deg, var(--card), var(--bg));
+  color: var(--accent);
+  box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+  margin-right: 0.5rem;
+  cursor: pointer;
+  transition: transform 0.2s ease, background-color 0.3s ease;
+}
+
+#modo-oscuro:hover,
+#modo-claro:hover {
+  background-color: var(--accent);
+  color: #000;
+  transform: scale(1.05);
+}
+
+/* Botón cerrar configuración */
+#cerrar-config {
+  background: linear-gradient(135deg, var(--danger), #ff6b6b);
+  color: #fff;
+  border: none;
+  padding: 0.6rem 1.2rem;
+  border-radius: 10px;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+  transition: transform 0.2s ease;
+}
+
+#cerrar-config:hover {
+  transform: scale(1.05);
+  background: #ff3b3b;
+}
+
+/* Modal de confirmación */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(30, 31, 38, 0.85);
+  backdrop-filter: blur(6px);
+  display: none;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+}
+
+.modal-overlay.active {
+  display: flex;
+}
+
+.modal-botones {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.modal-botones button {
+  padding: 0.6rem 1rem;
+  font-size: 1rem;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+#btn-confirmar {
+  background-color: var(--accent);
+  color: #000;
+}
+
+#btn-cancelar {
+  background-color: var(--danger);
+  color: #fff;
+}
+
+.modal-botones button:hover {
+  transform: scale(1.05);
+}
+
+/* Pantalla de bienvenida */
 #bienvenida-overlay {
   position: fixed;
   top: 0;
@@ -294,12 +541,7 @@ body, html {
   animation: fadeInBienvenida 1s ease-in forwards;
 }
 
-@keyframes fadeInBienvenida {
-  from { opacity: 0; transform: scale(0.8); }
-  to   { opacity: 1; transform: scale(1); }
-}
-
-/* Animación de despedida al cerrar sesión */
+/* Pantalla de despedida */
 .overlay-despedida {
   position: fixed;
   top: 0;
@@ -328,12 +570,53 @@ body, html {
   animation: fadeInDespedida 1s ease-in forwards;
 }
 
+/* Animaciones */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes logoFade {
+  from { opacity: 0; transform: scale(0.9); }
+  to   { opacity: 1; transform: scale(1); }
+}
+
+@keyframes typing {
+  from { width: 0; }
+  to   { width: 100%; }
+}
+
+@keyframes fadeInBienvenida {
+  from { opacity: 0; transform: scale(0.8); }
+  to   { opacity: 1; transform: scale(1); }
+}
+
 @keyframes fadeInDespedida {
   from { opacity: 0; transform: scale(0.8); }
   to   { opacity: 1; transform: scale(1); }
 }
 
-/* Responsive */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes logoFade {
+  from { opacity: 0; transform: scale(0.9); }
+  to   { opacity: 1; transform: scale(1); }
+}
+
+@keyframes typing {
+  from { width: 0; }
+  to   { width: 100%; }
+}
+
+@keyframes pulse {
+  0%   { transform: scale(1); opacity: 1; }
+  50%  { transform: scale(1.5); opacity: 0.5; }
+  100% { transform: scale(1); opacity: 1; }
+}
+
 @media screen and (max-width: 768px) {
   .container {
     flex-direction: column;
@@ -360,10 +643,12 @@ body, html {
   #contenido-central {
     width: 100%;
     margin: 0 auto;
+    padding: 1.5rem;
   }
 
   #clock {
     font-size: 2.5rem;
+    padding: 0.8rem 1.2rem;
   }
 
   #contador,
@@ -387,5 +672,38 @@ body, html {
 
   #side-menu.active {
     right: 0;
+  }
+
+  #btn-logout,
+  #toggle-menu {
+    font-size: 0.9rem;
+    padding: 0.5rem 1rem;
+  }
+
+  #btn-config {
+    font-size: 1.2rem;
+    padding: 0.5rem;
+  }
+
+  .modal-contenido {
+    width: 90%;
+    max-width: 480px;
+    padding: 1.5rem;
+  }
+
+  .tab-btn {
+    font-size: 0.95rem;
+    padding: 0.5rem 0.8rem;
+  }
+
+  #modo-oscuro,
+  #modo-claro {
+    font-size: 0.95rem;
+    padding: 0.5rem 0.8rem;
+  }
+
+  #cerrar-config {
+    font-size: 0.95rem;
+    padding: 0.5rem 1rem;
   }
 }

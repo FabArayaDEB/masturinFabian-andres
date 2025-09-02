@@ -1,5 +1,5 @@
 /* 1. Importa Montserrat y reset general */
-@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap');
 
 * {
   box-sizing: border-box;
@@ -10,11 +10,12 @@
 /* 2. Fondo negro y centrado del body */
 body {
   font-family: 'Montserrat', Arial, sans-serif;
-  background-color: #0c0c0c; /* Negro profundo */
+  background: linear-gradient(135deg, #0c0c0c 0%, #1a1a2e 100%);
   min-height: 100vh;
   display: flex;
   justify-content: center;
   align-items: center;
+  padding: 20px;
   animation: fadeInBg 1.5s ease-out;
 }
 
@@ -25,18 +26,105 @@ body {
 
 /* 3. Contenedor principal */
 .login-container {
+  display: flex;
   width: 100%;
-  max-width: 400px;
-  padding: 20px;
+  max-width: 900px;
+  min-height: 550px;
+  border-radius: 18px;
+  overflow: hidden;
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.5);
+}
+
+/* Panel informativo */
+.info-panel {
+  flex: 1;
+  background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+  color: white;
+  padding: 40px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.info-content h2 {
+  font-size: 28px;
+  margin-bottom: 20px;
+  font-weight: 700;
+}
+
+.info-content > p {
+  margin-bottom: 30px;
+  line-height: 1.6;
+  opacity: 0.9;
+}
+
+.features {
+  margin-bottom: 25px;
+}
+
+.feature {
+  display: flex;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+.feature i {
+  margin-right: 12px;
+  font-size: 18px;
+  width: 24px;
+  text-align: center;
+}
+
+.more-info-btn {
+  background: rgba(255, 255, 255, 0.15);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  color: white;
+  padding: 12px 20px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(10px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 10px;
+}
+
+.more-info-btn i {
+  margin-left: 8px;
+  transition: transform 0.3s ease;
+}
+
+.more-info-btn:hover {
+  background: rgba(255, 255, 255, 0.25);
+}
+
+.extra-info {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.5s ease;
+  margin-top: 15px;
+}
+
+.extra-info.show {
+  max-height: 200px;
+}
+
+.extra-info p {
+  margin-bottom: 12px;
+  line-height: 1.5;
+  font-size: 14px;
 }
 
 /* 4. Tarjeta de login (blanco semitransparente 90% opaco) */
 .login-card {
-  background-color: rgba(255, 255, 255, 0.90);
-  border-radius: 18px;
+  flex: 1;
+  background-color: rgba(255, 255, 255, 0.95);
   padding: 40px 30px;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4); /* Sombra más oscura */
-  text-align: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
   animation: popIn 0.8s cubic-bezier(.68, -0.55, .27, 1.55);
 }
 
@@ -57,7 +145,8 @@ body {
   border-radius: 12px;
   padding: 0.5rem 1rem;
   display: inline-block;
-  margin-bottom: 2rem;
+  margin: 0 auto 2rem;
+  width: fit-content;
 }
 
 /* 6. Imagen del logo sin sombra */
@@ -66,6 +155,21 @@ body {
   width: 100%;
   height: auto;
   display: block;
+}
+
+.welcome-text {
+  text-align: center;
+  font-size: 24px;
+  font-weight: 700;
+  color: #333;
+  margin-bottom: 8px;
+}
+
+.login-subtitle {
+  text-align: center;
+  color: #666;
+  margin-bottom: 25px;
+  font-size: 15px;
 }
 
 /* 7. Estilos de los campos de entrada */
@@ -79,51 +183,136 @@ body {
   margin-bottom: 8px;
   color: #333;
   font-weight: 600;
+  font-size: 14px;
 }
 
-.input-group input {
+.input-with-icon {
+  position: relative;
+}
+
+.input-with-icon i {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #777;
+}
+
+.input-with-icon .fa-envelope, 
+.input-with-icon .fa-lock {
+  left: 15px;
+}
+
+.input-with-icon .toggle-password {
+  right: 15px;
+  cursor: pointer;
+}
+
+.input-with-icon input {
   width: 100%;
-  padding: 12px;
-  border: 1px solid #ccc;
+  padding: 12px 45px;
+  border: 1px solid #ddd;
   border-radius: 8px;
   background: #f7f9fa;
   font-size: 15px;
-  transition: border-color 0.3s;
+  transition: all 0.3s;
 }
 
-.input-group input:focus {
+.input-with-icon input:focus {
   outline: none;
   border-color: #2575fc;
+  box-shadow: 0 0 0 3px rgba(37, 117, 252, 0.1);
+}
+
+/* Mostrar contraseña */
+.show-password {
+  margin-bottom: 20px;
+}
+
+.show-password-label {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  font-size: 14px;
+  color: #555;
+}
+
+.show-password-label input {
+  margin-right: 8px;
 }
 
 /* 8. Botón de envío */
-button {
+.login-btn {
   width: 100%;
   padding: 14px;
-  margin-top: 10px;
   background: linear-gradient(90deg, #6a11cb 0%, #2575fc 100%);
   border: none;
   border-radius: 8px;
   color: #fff;
-  font-size: 17px;
+  font-size: 16px;
   font-weight: 700;
   cursor: pointer;
-  transition: background 0.3s, transform 0.2s;
+  transition: all 0.3s;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
-button:hover {
+.login-btn i {
+  margin-left: 8px;
+  transition: transform 0.3s;
+}
+
+.login-btn:hover {
   background: linear-gradient(90deg, #2575fc 0%, #6a11cb 100%);
-  transform: translateY(-2px) scale(1.03);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 15px rgba(106, 17, 203, 0.3);
 }
 
-/* 9. Lista de errores */
-.errors {
-  list-style: none;
+.login-btn:hover i {
+  transform: translateX(4px);
+}
+
+/* Separador */
+.separator {
+  display: flex;
+  align-items: center;
+  text-align: center;
+  margin: 25px 0;
+  color: #777;
+  font-size: 14px;
+}
+
+.separator::before,
+.separator::after {
+  content: '';
+  flex: 1;
+  border-bottom: 1px solid #ddd;
+}
+
+.separator::before {
+  margin-right: 10px;
+}
+
+.separator::after {
+  margin-left: 10px;
+}
+
+/* Mensaje de error */
+.error-message {
   color: #e74c3c;
   margin-bottom: 16px;
   font-size: 15px;
   text-align: left;
   animation: shake 0.4s;
+  background: rgba(231, 76, 60, 0.1);
+  padding: 12px;
+  border-radius: 8px;
+  border-left: 4px solid #e74c3c;
+  display: none;
+}
+
+.error-message.show {
+  display: block;
 }
 
 @keyframes shake {
@@ -137,6 +326,7 @@ button:hover {
   margin-top: 18px;
   font-size: 15px;
   color: #444;
+  text-align: center;
 }
 
 .register-link a {
@@ -149,4 +339,25 @@ button:hover {
 .register-link a:hover {
   color: #2575fc;
   text-decoration: underline;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .login-container {
+    flex-direction: column;
+    max-width: 400px;
+  }
+  
+  .info-panel {
+    order: 2;
+    padding: 25px;
+  }
+  
+  .login-card {
+    order: 1;
+  }
+  
+  .info-content h2 {
+    font-size: 22px;
+  }
 }

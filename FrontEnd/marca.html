@@ -7,68 +7,121 @@
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
 </head>
 <body>
-
-  <!-- Pantalla de bienvenida animada -->
+  <!-- Pantalla de bienvenida -->
   <div id="bienvenida-overlay">
     <h1 class="bienvenida-text">¡Bienvenido!</h1>
   </div>
 
-  <!-- Pantalla de despedida animada -->
+  <!-- Pantalla de despedida -->
   <div id="despedida-overlay" class="overlay-despedida">
     <h1 class="despedida-text">Nos vemos en otra ocasión</h1>
   </div>
 
-  <!-- Botonera lateral derecha -->
-  <div class="container">
-    <div id="logout-section">
-      <button id="btn-logout">🔒 Cerrar Sesión</button>
-    </div>
-
-    <div class="container">
-      <!-- Botonera lateral izquierda -->
-      <div id="botonera-lateral">
-        <h2 id="titulo-marcas">Registro de Marcas</h2>
-        <button id="btn-entrada">🟢 Entrada</button>
-        <button id="btn-salida-colacion">🍽️ Salida a colación</button>
-        <button id="btn-entrada-colacion">🔙 Entrada de colación</button>
-        <button id="btn-salida-final">🔴 Salida del turno</button>
-        <button id="btn-exportar">📤 Exportar CSV</button>
-      </div>
-
-      <!-- Contenido principal centrado -->
-      <div id="contenido-central">
-        <div id="logo-section">
-          <img src="images/logo-masturintimer.png" alt="Logo MasturinTimer">
-          <div id="bienvenida">
-            <h1 id="saludo">¡Bienvenido!</h1>
-            <p id="frase-motivadora" class="frase"></p>
-          </div>
-        </div>
-
-        <div id="clock-section">
-          <div id="clock">00:00:00</div>
-          <div id="date">--/--/----</div>
-
-          <div id="contador-section">
-            <h3>Contador activo</h3>
-            <div id="contador">00:00:00</div>
-          </div>
-
-          <div id="total-section">
-            <h3>Total trabajado</h3>
-            <div id="total">00:00:00</div>
-          </div>
-        </div>
-
-        <div id="marca-section">
-          <ul id="registro"></ul>
-        </div>
+  <!-- Modal de confirmación -->
+  <div id="modal-confirmacion" class="modal-overlay">
+    <div class="modal-contenido">
+      <h2>¿Seguro que quieres realizar esta acción?</h2>
+      <div class="modal-botones">
+        <button id="btn-confirmar">✅ Sí, confirmar</button>
+        <button id="btn-cancelar">❌ Cancelar</button>
       </div>
     </div>
   </div>
 
-  <button id="toggle-menu">📅 Calendario</button>
+  <!-- Modal de configuración -->
+  <div id="modal-config" class="modal-overlay">
+    <div class="modal-contenido">
+      <h2>Configuración</h2>
+      <div class="config-tabs">
+        <button class="tab-btn" data-tab="tema">🎨 Tema</button>
+        <button class="tab-btn" data-tab="faq">❓ Preguntas</button>
+        <button class="tab-btn" data-tab="contacto">📬 Contacto</button>
+        <button class="tab-btn" data-tab="creditos">👥 Créditos</button>
+      </div>
+      <div class="tab-content" id="tab-tema">
+        <p>Selecciona el tema visual:</p>
+        <button id="modo-oscuro">🌙 Oscuro</button>
+        <button id="modo-claro">☀️ Claro</button>
+      </div>
+      <div class="tab-content" id="tab-faq" style="display:none;">
+        <p><strong>¿Cómo marco mi asistencia?</strong><br>Presiona el botón "Entrada" al comenzar tu turno.</p>
+        <p><strong>¿Para qué sirve el calendario?</strong><br>Permite ver tus marcas por fecha.</p>
+        <p><strong>¿Cómo exporto mis registros?</strong><br>Usa el botón "Exportar CSV".</p>
+      </div>
+      <div class="tab-content" id="tab-contacto" style="display:none;">
+        <p>¿Tienes dudas o sugerencias?</p>
+        <a href="contacto.html">Ir a la página de contacto</a>
+      </div>
+      <div class="tab-content" id="tab-creditos" style="display:none;">
+        <p>Este sistema fue creado por Diego y su equipo con dedicación y enfoque en la experiencia del usuario.</p>
+      </div>
+      <button id="cerrar-config">Cerrar</button>
+    </div>
+  </div>
 
+  <!-- Botones superiores -->
+  <div id="logout-section">
+    <button id="btn-logout">🔒 <span>Cerrar Sesión</span></button>
+  </div>
+  <button id="toggle-menu">📅 <span>Calendario</span></button>
+
+  <!-- Botón de configuración -->
+  <div id="config-section">
+    <button id="btn-config">⚙️</button>
+  </div>
+
+  <!-- Contenido principal -->
+  <div class="container">
+    <!-- Botonera lateral izquierda -->
+    <div id="botonera-lateral">
+      <h2 id="titulo-marcas">Registro de Marcas</h2>
+      <button id="btn-entrada">🟢 Entrada</button>
+      <button id="btn-salida-colacion">🍽️ Salida a colación</button>
+      <button id="btn-entrada-colacion">🔙 Entrada de colación</button>
+      <button id="btn-salida-final">🔴 Salida del turno</button>
+      <button id="btn-exportar">📤 Exportar CSV</button>
+    </div>
+
+    <!-- Contenido central -->
+    <div id="contenido-central">
+      <!-- Título superior -->
+      <div id="titulo-principal">
+        <h1>Registro de Horario</h1>
+      </div>
+
+      <!-- Logo y bienvenida -->
+      <div id="logo-section">
+        <img src="images/logo-masturintimer.png" alt="Logo MasturinTimer">
+        <div id="bienvenida">
+          <h1 id="saludo">¡Bienvenido!</h1>
+          <p id="frase-motivadora" class="frase"></p>
+        </div>
+      </div>
+
+      <!-- Reloj y contadores -->
+      <div id="clock-section">
+        <div id="clock">00:00:00</div>
+        <div id="date">--/--/----</div>
+
+        <div id="contador-section">
+          <h3>Contador activo</h3>
+          <div id="contador">00:00:00</div>
+        </div>
+
+        <div id="total-section">
+          <h3>Total trabajado</h3>
+          <div id="total">00:00:00</div>
+        </div>
+      </div>
+
+      <!-- Registro -->
+      <div id="marca-section">
+        <ul id="registro"></ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- Calendario lateral -->
   <div id="side-menu">
     <div class="menu-header">
       <h3>Calendario</h3>
@@ -78,18 +131,9 @@
     <div id="marcas-dia"></div>
   </div>
 
+  <!-- Scripts -->
   <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
   <script src="js/marca.js"></script>
-  <script>
-    // 🎬 Animación de bienvenida al cargar
-    window.addEventListener('load', () => {
-      const overlay = document.getElementById('bienvenida-overlay');
-      setTimeout(() => {
-        overlay.style.opacity = '0';
-        overlay.style.visibility = 'hidden';
-      }, 2000);
-    });
-  </script>
   <script src="https://cdn.jsdelivr.net/npm/jwt-decode/build/jwt-decode.min.js"></script>
   <script type="module" src="conexionBackend/asistencia.js"></script>
 </body>

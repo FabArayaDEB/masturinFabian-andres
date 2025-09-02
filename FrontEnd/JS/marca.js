@@ -13,13 +13,23 @@ document.addEventListener('DOMContentLoaded', () => {
   const btnSalidaFinal     = document.getElementById('btn-salida-final');
   const btnExportar        = document.getElementById('btn-exportar');
   const btnLogout          = document.getElementById('btn-logout');
+  const toggleMenuBtn      = document.getElementById('toggle-menu');
+  const closeMenuBtn       = document.getElementById('close-menu');
+  const calendarInput      = document.getElementById('calendar');
+  const marcasDiaEl        = document.getElementById('marcas-dia');
 
-  // Calendario
-  const toggleMenuBtn = document.getElementById('toggle-menu');
-  const sideMenu      = document.getElementById('side-menu');
-  const closeMenuBtn  = document.getElementById('close-menu');
-  const calendarInput = document.getElementById('calendar');
-  const marcasDiaEl   = document.getElementById('marcas-dia');
+  // Modal de confirmación
+  const modalConfirm       = document.getElementById('modal-confirmacion');
+  const btnConfirmar       = document.getElementById('btn-confirmar');
+  const btnCancelar        = document.getElementById('btn-cancelar');
+  let accionPendiente      = null;
+
+  // Modal de configuración
+  const configBtn          = document.getElementById('btn-config');
+  const configModal        = document.getElementById('modal-config');
+  const cerrarConfig       = document.getElementById('cerrar-config');
+  const tabBtns            = document.querySelectorAll('.tab-btn');
+  const tabContents        = document.querySelectorAll('.tab-content');
 
   // Estado
   let contadorInterval;
@@ -28,7 +38,7 @@ document.addEventListener('DOMContentLoaded', () => {
   let estado           = 'inactivo';
   let historialPorFecha = JSON.parse(localStorage.getItem('historialPorFecha')) || {};
 
-  // ⏱ Reloj en tiempo real
+  // Reloj en tiempo real
   function updateClock() {
     const now = new Date();
     const h = String(now.getHours()).padStart(2, '0');
@@ -68,46 +78,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const fechaCompleta = dateEl.textContent;
     const fechaISO = new Date().toLocaleDateString('sv-SE');
 
-    const [hStr, mStr] = hora.split(':');
-    const horaActual = new Date();
-    horaActual.setHours(parseInt(hStr));
-    horaActual.setMinutes(parseInt(mStr));
+    const texto = `${tipo}: ${fechaCompleta} - ${hora}${extra ? ` (${extra})` : ''}`;
 
-    let clasificacion = '';
-
-    if (tipo.includes('Entrada') && !tipo.includes('colación')) {
-      const limiteNormal = new Date(horaActual);
-      limiteNormal.setHours(9, 30, 0);
-
-      if (horaActual <= limiteNormal) {
-        clasificacion = 'Marcaje normal';
-      } else {
-        clasificacion = '⏰ Atraso';
-      }
-    }
-
-    if (tipo.includes('Salida') && tipo.includes('Fin')) {
-      const salidaAnticipada = new Date(horaActual);
-      salidaAnticipada.setHours(17, 30, 0);
-
-      const horaExtra = new Date(horaActual);
-      horaExtra.setHours(18, 30, 0);
-
-      if (horaActual < salidaAnticipada) {
-        clasificacion = '🚪 Salida anticipada';
-      } else if (horaActual >= salidaAnticipada && horaActual <= horaExtra) {
-        clasificacion = '✅ Salida normal';
-      } else {
-        clasificacion = '💼 Horas extras';
-      }
-    }
-
-    const texto = `${tipo}: ${fechaCompleta} - ${hora}${clasificacion ? ` [${clasificacion}]` : ''}${extra ? ` (${extra})` : ''}`;
-
-    if (!historialPorFecha[fechaISO]) {
-      historialPorFecha[fechaISO] = [];
-    }
-
+    if (!historialPorFecha[fechaISO]) historialPorFecha[fechaISO] = [];
     historialPorFecha[fechaISO].push(texto);
     localStorage.setItem('historialPorFecha', JSON.stringify(historialPorFecha));
     registroEl.innerHTML = '';
@@ -116,10 +89,9 @@ document.addEventListener('DOMContentLoaded', () => {
   function mostrarMarcasPorFecha(fechaStr) {
     marcasDiaEl.innerHTML = `<strong>Marcas del ${fechaStr}:</strong>`;
     const marcas = historialPorFecha[fechaStr];
-
-    if (marcas && marcas.length > 0) {
+    if (marcas?.length) {
       const ul = document.createElement('ul');
-      marcas.forEach((txt) => {
+      marcas.forEach(txt => {
         const li = document.createElement('li');
         li.className = 'marca-item';
         li.textContent = txt;
@@ -147,64 +119,77 @@ document.addEventListener('DOMContentLoaded', () => {
     URL.revokeObjectURL(url);
   }
 
+  // Modal de confirmación
+  function mostrarModal(accion) {
+    accionPendiente = accion;
+    modalConfirm.classList.add('active');
+  }
+
+  function cerrarModal() {
+    modalConfirm.classList.remove('active');
+    accionPendiente = null;
+  }
+
+  btnCancelar.addEventListener('click', cerrarModal);
+  btnConfirmar.addEventListener('click', () => {
+    if (accionPendiente) accionPendiente();
+    cerrarModal();
+  });
+
+  // Acciones con confirmación
   btnEntrada.addEventListener('click', () => {
-    if (estado === 'inactivo' || estado === 'esperando entrada') {
+    mostrarModal(() => {
       contadorSegundos = 0;
       totalSegundos = 0;
       iniciarContador();
       estado = 'trabajando';
       registrarMarca('🟢 Entrada / Inicio de turno');
-    } else if (estado === 'en colacion') {
-      contadorSegundos = 0;
-      iniciarContador();
-      estado = 'trabajando';
-      registrarMarca('🔙 Entrada / Reingreso de colación');
-    }
+    });
   });
 
   btnSalidaColacion.addEventListener('click', () => {
-    if (estado === 'trabajando') {
+    mostrarModal(() => {
       detenerContador();
       contadorSegundos = 0;
       contadorEl.textContent = '00:00:00';
       estado = 'en colacion';
       registrarMarca('🍽️ Salida a colación');
-    }
+    });
   });
 
   btnEntradaColacion.addEventListener('click', () => {
-    if (estado === 'en colacion') {
+    mostrarModal(() => {
       contadorSegundos = 0;
       iniciarContador();
       estado = 'trabajando';
       registrarMarca('🔙 Entrada / Reingreso de colación');
-    }
+    });
   });
 
   btnSalidaFinal.addEventListener('click', () => {
-    if (estado === 'trabajando') {
+    mostrarModal(() => {
       detenerContador();
       const tiempo = formatSegundos(totalSegundos);
       registrarMarca('🔴 Salida / Fin de turno', `Total trabajado: ${tiempo}`);
       estado = 'inactivo';
       contadorSegundos = 0;
       contadorEl.textContent = '00:00:00';
-
       setTimeout(() => {
         totalSegundos = 0;
         totalEl.textContent = '00:00:00';
       }, 120000);
-    }
+    });
   });
 
   btnExportar.addEventListener('click', exportarCSV);
 
+  // Calendario
   toggleMenuBtn.addEventListener('click', () => {
-    sideMenu.classList.toggle('active');
+    document.getElementById('side-menu').classList.toggle('active');
   });
 
   closeMenuBtn.addEventListener('click', () => {
-    sideMenu.classList.remove('active');
+    document.getElementById('side-menu').classList.remove('active');
   });
 
   flatpickr(calendarInput, {
@@ -214,6 +199,48 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 
+  // Modal de configuración
+  configBtn.addEventListener('click', () => {
+    configModal.classList.add('active');
+  });
+
+  cerrarConfig.addEventListener('click', () => {
+    configModal.classList.remove('active');
+  });
+
+  tabBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      const target = btn.getAttribute('data-tab');
+      tabBtns.forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      tabContents.forEach(content => {
+        content.classList.remove('active');
+        if (content.id === 'tab-' + target) {
+          content.classList.add('active');
+          if (target === 'creditos') {
+            content.innerHTML = '<p>Creado por el hermoso equipo de Masturin LTDA</p>';
+          }
+        }
+      });
+    });
+  });
+
+    // Cambio de tema
+  document.getElementById('modo-claro').addEventListener('click', () => {
+    document.documentElement.style.setProperty('--bg', '#f5f5f5');
+    document.documentElement.style.setProperty('--card', '#ffffff');
+    document.documentElement.style.setProperty('--text', '#222');
+    document.documentElement.style.setProperty('--muted', '#666');
+  });
+
+  document.getElementById('modo-oscuro').addEventListener('click', () => {
+    document.documentElement.style.setProperty('--bg', '#1e1f26');
+    document.documentElement.style.setProperty('--card', '#2c2f36');
+    document.documentElement.style.setProperty('--text', '#e0e0e0');
+    document.documentElement.style.setProperty('--muted', '#888');
+  });
+
+  // Saludo dinámico
   function obtenerSaludo() {
     const hora = new Date().getHours();
     if (hora >= 5 && hora < 12) return '¡Buenos días!';
@@ -241,6 +268,7 @@ document.addEventListener('DOMContentLoaded', () => {
     fraseEl.textContent = fraseAleatoria;
   }
 
+  // Animación de bienvenida
   const overlay = document.getElementById('bienvenida-overlay');
   if (overlay) {
     setTimeout(() => {
@@ -249,6 +277,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }, 2000);
   }
 
+  // Cierre de sesión con despedida
   btnLogout.addEventListener('click', () => {
     const nombreUsuario = localStorage.getItem('userEmail') || 'usuario';
     const confirmar = window.confirm(`¿Estás seguro que quieres salir, ${nombreUsuario}?`);
@@ -267,7 +296,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 
-  // ⏱ Inicialización
+  // Inicialización
   setInterval(updateClock, 1000);
   updateClock();
   contadorEl.textContent = '00:00:00';
