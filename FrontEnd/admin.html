@@ -19,9 +19,9 @@
           <button id="toggle-theme-btn" class="theme-toggle-btn" title="Cambiar tema">
             <i class="fas fa-moon"></i>
           </button>
-          <a href="index.html" class="logout-btn">
+          <button onclick="cerrarSesion()" class="logout-btn">
             <i class="fas fa-sign-out-alt"></i> Cerrar Sesión
-          </a>
+          </button>
         </div>
       </div>
     </header>
@@ -159,6 +159,8 @@
     </div>
   </div>
 
+  <script src="js/config.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/jwt-decode/build/jwt-decode.min.js"></script>
   <script src="js/admin.js"></script>
 </body>
 </html>

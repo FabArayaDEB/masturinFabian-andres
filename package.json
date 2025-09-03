@@ -1,0 +1,47 @@
+{
+  "name": "masturin-timer",
+  "version": "1.0.0",
+  "description": "Sistema de registro de horarios MasturinTimer",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "build": "electron-builder",
+    "build-win": "electron-builder --win",
+    "dev": "electron . --dev"
+  },
+  "build": {
+    "appId": "com.masturin.timer",
+    "productName": "MasturinTimer",
+    "directories": {
+      "output": "dist"
+    },
+    "files": [
+      "main.js",
+      "FrontEnd/**/*",
+      "BackEnd/**/*",
+      "node_modules/**/*"
+    ],
+    "win": {
+      "target": "nsis"
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true
+    }
+  },
+  "keywords": [
+    "electron",
+    "timer",
+    "attendance",
+    "masturin"
+  ],
+  "author": "Masturin LTDA",
+  "license": "MIT",
+  "dependencies": {
+    "electron-store": "^8.1.0"
+  },
+  "devDependencies": {
+    "electron": "^28.0.0",
+    "electron-builder": "^24.9.1"
+  }
+}

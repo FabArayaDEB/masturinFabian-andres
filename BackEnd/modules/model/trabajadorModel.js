@@ -43,7 +43,7 @@ class TrabajadorModel {
                         return db.rollback(() => callback(err));
                     }
 
-                    const queryContrato = 'INSERT INTO contratos (rut, fecha_inicio, fecha_fin, cargo, sueldo, tipo_contrato, hora_entrada, hora_salida, hora_entrada_colacion, hora_salida_colacion) VALUES (?, ?, ?, ?, ?, ?)';
+                    const queryContrato = 'INSERT INTO contratos (rut, fecha_inicio, fecha_fin, cargo, sueldo, tipo_contrato, hora_entrada, hora_salida, hora_entrada_colacion, hora_salida_colacion) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)';
                     db.query(queryContrato, [
                         trabajador.rut,
                         trabajador.fecha_inicio,
@@ -51,10 +51,10 @@ class TrabajadorModel {
                         trabajador.cargo,
                         trabajador.sueldo,
                         trabajador.tipo_contrato,
-                        trabajador.hora_entrada, 
-                        trabajador.hora_salida,
-                        trabajador.hora_entrada_colacion,
-                        trabajador.hora_salida_colacion
+                        trabajador.hora_entrada || null, 
+                        trabajador.hora_salida || null,
+                        trabajador.hora_entrada_colacion || null,
+                        trabajador.hora_salida_colacion || null
                     ], (err) => {
                         if (err) {
                             return db.rollback(() => callback(err));

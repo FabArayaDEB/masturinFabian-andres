@@ -1,15 +1,42 @@
 document.addEventListener('DOMContentLoaded', () => {
-  const email = localStorage.getItem('userEmail');
-  const rol = localStorage.getItem('userRol');
+  // Verificar autenticación
+  const token = localStorage.getItem('token');
+  if (!token) {
+    alert('Acceso denegado. Debe iniciar sesión.');
+    window.location.href = 'index.html';
+    return;
+  }
 
-  //if (!email || rol !== 'admin') {
-  //  alert('Acceso denegado. Solo administradores pueden ingresar aquí.');
-  //  window.location.href = 'index.html';
-  //  return;
-  //}
+  try {
+    const decoded = jwt_decode(token);
+    
+    // Verificar si el token ha expirado
+    if (decoded.exp * 1000 <= Date.now()) {
+      alert('Su sesión ha expirado. Por favor, inicie sesión nuevamente.');
+      localStorage.removeItem('token');
+      localStorage.removeItem('user');
+      window.location.href = 'index.html';
+      return;
+    }
 
-  //const info = document.getElementById('admin-info');
-  //sif (info) info.textContent = `Sesión iniciada como: ${email}`;
+    // Verificar si es administrador
+    if (decoded.rol !== 'admin') {
+      alert('Acceso denegado. Solo administradores pueden ingresar aquí.');
+      window.location.href = 'marca.html';
+      return;
+    }
+
+    // Mostrar información del usuario
+    const info = document.getElementById('admin-info');
+    if (info) info.textContent = `Sesión iniciada como: ${decoded.correo}`;
+  } catch (error) {
+    console.error('Error al decodificar token:', error);
+    alert('Token inválido. Por favor, inicie sesión nuevamente.');
+    localStorage.removeItem('token');
+    localStorage.removeItem('user');
+    window.location.href = 'index.html';
+    return;
+  }
 
   // Inicializar la interfaz
   inicializarInterfaz();
@@ -63,12 +90,18 @@ function mostrarPanel(tipo) {
 }
 
 function cerrarSesion() {
+  // Limpiar todos los datos de sesión
+  localStorage.removeItem('token');
+  localStorage.removeItem('user');
   localStorage.removeItem('userEmail');
   localStorage.removeItem('userRol');
+  localStorage.removeItem('rememberMe');
+  
+  // Redirigir al login
   window.location.href = 'index.html';
 }
 
-document.getElementById('usuario-form')?.addEventListener('submit', function (e) {
+document.getElementById('usuario-form')?.addEventListener('submit', async function (e) {
   e.preventDefault();
 
   const rut = document.getElementById('rut').value.trim();
@@ -81,102 +114,185 @@ document.getElementById('usuario-form')?.addEventListener('submit', function (e)
   const sueldo = document.getElementById('sueldo').value;
   const tipo_contrato = document.getElementById('tipo_contrato').value;
 
-  if (!rut || !correo || !contraseña || !fecha_inicio || !fecha_fin || !cargo || !sueldo) {
-    mostrarNotificacion('Completa todos los campos', 'error');
+  if (!rut || !correo || !contraseña || !fecha_inicio || !cargo || !sueldo) {
+    mostrarNotificacion('Completa todos los campos obligatorios', 'error');
     return;
   }
 
-  const usuarios = JSON.parse(localStorage.getItem('usuarios')) || [];
-
-  const index = usuarios.findIndex(u => u.rut === rut);
+  const token = localStorage.getItem('token');
+  if (!token) {
+    mostrarNotificacion('Error: No hay token de autenticación', 'error');
+    return;
+  }
 
   const nuevoUsuario = {
     rut,
     correo,
     contraseña,
-    rol,
-    contrato: {
-      fecha_inicio,
-      fecha_fin,
-      cargo,
-      sueldo,
-      tipo_contrato
-    }
+    cargo,
+    sueldo: parseFloat(sueldo),
+    tipo_contrato,
+    fecha_inicio,
+    fecha_fin: fecha_fin || null
   };
 
-  if (index >= 0) {
-    usuarios[index] = nuevoUsuario;
-    mostrarNotificacion('Usuario modificado exitosamente', 'success');
-  } else {
-    if (usuarios.some(u => u.correo === correo)) {
-      mostrarNotificacion('Ya existe un usuario con ese correo', 'error');
-      return;
-    }
-    usuarios.push(nuevoUsuario);
-    mostrarNotificacion('Usuario creado exitosamente', 'success');
-  }
+  try {
+    const API_BASE_URL = window.appConfig ? window.appConfig.API_BASE_URL : "http://localhost:3000";
+    const response = await fetch(`${API_BASE_URL}/api/trabajadores`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`
+      },
+      body: JSON.stringify(nuevoUsuario)
+    });
 
-  localStorage.setItem('usuarios', JSON.stringify(usuarios));
-  cargarUsuarios();
-  this.reset();
+    const data = await response.json();
+
+    if (response.ok) {
+      mostrarNotificacion('Usuario creado exitosamente', 'success');
+      cargarUsuarios();
+      this.reset();
+    } else {
+      mostrarNotificacion(data.error || 'Error al crear usuario', 'error');
+    }
+  } catch (error) {
+    console.error('Error al crear usuario:', error);
+    mostrarNotificacion('Error de conexión con el servidor', 'error');
+  }
 });
 
-function cargarUsuarios() {
-  const usuarios = JSON.parse(localStorage.getItem('usuarios')) || [];
+async function cargarUsuarios() {
   const tableDiv = document.getElementById('usuarios-table');
+  const token = localStorage.getItem('token');
 
-  if (!usuarios.length) {
-    tableDiv.innerHTML = '<div class="no-data"><i class="fas fa-users"></i><p>No hay usuarios registrados.</p></div>';
+  if (!token) {
+    tableDiv.innerHTML = '<div class="no-data"><i class="fas fa-exclamation-triangle"></i><p>Error: No hay token de autenticación.</p></div>';
     return;
   }
 
-  let html = '<table><thead><tr><th>RUT</th><th>Correo</th><th>Rol</th><th>Cargo</th><th>Inicio</th><th>Fin</th><th>Acciones</th></tr></thead><tbody>';
-  usuarios.forEach(u => {
-    html += `<tr>
-      <td>${u.rut}</td>
-      <td>${u.correo}</td>
-      <td><span class="badge ${u.rol === 'admin' ? 'badge-admin' : 'badge-user'}">${u.rol}</span></td>
-      <td>${u.contrato?.cargo || '-'}</td>
-      <td>${u.contrato?.fecha_inicio || '-'}</td>
-      <td>${u.contrato?.fecha_fin || '-'}</td>
-      <td class="actions">
-        <button onclick="editarUsuario('${u.rut}')" title="Editar"><i class="fas fa-edit"></i></button>
-        <button onclick="eliminarUsuario('${u.rut}')" title="Eliminar"><i class="fas fa-trash"></i></button>
-      </td>
-    </tr>`;
-  });
-  html += '</tbody></table>';
-  tableDiv.innerHTML = html;
+  try {
+    const API_BASE_URL = window.appConfig ? window.appConfig.API_BASE_URL : "http://localhost:3000";
+    const response = await fetch(`${API_BASE_URL}/api/trabajadores`, {
+      method: 'GET',
+      headers: {
+        'Authorization': `Bearer ${token}`
+      }
+    });
+
+    if (!response.ok) {
+      throw new Error('Error al obtener usuarios');
+    }
+
+    const data = await response.json();
+    const usuarios = data.data || [];
+
+    if (!usuarios.length) {
+      tableDiv.innerHTML = '<div class="no-data"><i class="fas fa-users"></i><p>No hay usuarios registrados.</p></div>';
+      return;
+    }
+
+    let html = '<table><thead><tr><th>RUT</th><th>Correo</th><th>Rol</th><th>Cargo</th><th>Inicio</th><th>Fin</th><th>Acciones</th></tr></thead><tbody>';
+    usuarios.forEach(u => {
+      html += `<tr>
+        <td>${u.rut}</td>
+        <td>${u.correo}</td>
+        <td><span class="badge ${u.rol === 'admin' ? 'badge-admin' : 'badge-user'}">${u.rol}</span></td>
+        <td>${u.cargo || '-'}</td>
+        <td>${u.fecha_inicio || '-'}</td>
+        <td>${u.fecha_fin || '-'}</td>
+        <td class="actions">
+          <button onclick="editarUsuario('${u.rut}')" title="Editar"><i class="fas fa-edit"></i></button>
+          <button onclick="eliminarUsuario('${u.rut}')" title="Eliminar"><i class="fas fa-trash"></i></button>
+        </td>
+      </tr>`;
+    });
+    html += '</tbody></table>';
+    tableDiv.innerHTML = html;
+  } catch (error) {
+    console.error('Error al cargar usuarios:', error);
+    tableDiv.innerHTML = '<div class="no-data"><i class="fas fa-exclamation-triangle"></i><p>Error al cargar usuarios del servidor.</p></div>';
+  }
 }
 
-function eliminarUsuario(rut) {
+async function eliminarUsuario(rut) {
   if (!confirm('¿Estás seguro de eliminar este usuario?')) return;
-  let usuarios = JSON.parse(localStorage.getItem('usuarios')) || [];
-  usuarios = usuarios.filter(u => u.rut !== rut);
-  localStorage.setItem('usuarios', JSON.stringify(usuarios));
-  cargarUsuarios();
-  mostrarNotificacion('Usuario eliminado correctamente', 'success');
+  
+  const token = localStorage.getItem('token');
+  if (!token) {
+    mostrarNotificacion('Error: No hay token de autenticación', 'error');
+    return;
+  }
+
+  try {
+    const API_BASE_URL = window.appConfig ? window.appConfig.API_BASE_URL : "http://localhost:3000";
+    const response = await fetch(`${API_BASE_URL}/api/trabajadores/${rut}`, {
+      method: 'DELETE',
+      headers: {
+        'Authorization': `Bearer ${token}`
+      }
+    });
+
+    const data = await response.json();
+
+    if (response.ok) {
+      mostrarNotificacion('Usuario eliminado correctamente', 'success');
+      cargarUsuarios();
+    } else {
+      mostrarNotificacion(data.error || 'Error al eliminar usuario', 'error');
+    }
+  } catch (error) {
+    console.error('Error al eliminar usuario:', error);
+    mostrarNotificacion('Error de conexión con el servidor', 'error');
+  }
 }
 
-function editarUsuario(rut) {
-  const usuarios = JSON.parse(localStorage.getItem('usuarios')) || [];
-  const usuario = usuarios.find(u => u.rut === rut);
-  if (!usuario) return;
+async function editarUsuario(rut) {
+  const token = localStorage.getItem('token');
+  if (!token) {
+    mostrarNotificacion('Error: No hay token de autenticación', 'error');
+    return;
+  }
 
-  document.getElementById('rut').value = usuario.rut;
-  document.getElementById('correo').value = usuario.correo;
-  document.getElementById('contraseña').value = usuario.contraseña;
-  document.getElementById('rol').value = usuario.rol;
-  document.getElementById('fecha_inicio').value = usuario.contrato?.fecha_inicio || '';
-  document.getElementById('fecha_fin').value = usuario.contrato?.fecha_fin || '';
-  document.getElementById('cargo').value = usuario.contrato?.cargo || '';
-  document.getElementById('sueldo').value = usuario.contrato?.sueldo || '';
-  document.getElementById('tipo_contrato').value = usuario.contrato?.tipo_contrato || '';
-  
-  // Scroll al formulario
-  document.getElementById('usuario-form').scrollIntoView({ behavior: 'smooth' });
-  
-  mostrarNotificacion('Modo edición activado para: ' + usuario.rut, 'info');
+  try {
+    const API_BASE_URL = window.appConfig ? window.appConfig.API_BASE_URL : "http://localhost:3000";
+    const response = await fetch(`${API_BASE_URL}/api/trabajadores/${rut}`, {
+      method: 'GET',
+      headers: {
+        'Authorization': `Bearer ${token}`
+      }
+    });
+
+    if (!response.ok) {
+      throw new Error('Error al obtener datos del usuario');
+    }
+
+    const data = await response.json();
+    const usuario = data.data;
+
+    if (!usuario) {
+      mostrarNotificacion('Usuario no encontrado', 'error');
+      return;
+    }
+
+    document.getElementById('rut').value = usuario.rut;
+    document.getElementById('correo').value = usuario.correo;
+    document.getElementById('contraseña').value = ''; // No mostrar contraseña por seguridad
+    document.getElementById('rol').value = usuario.rol;
+    document.getElementById('fecha_inicio').value = usuario.fecha_inicio || '';
+    document.getElementById('fecha_fin').value = usuario.fecha_fin || '';
+    document.getElementById('cargo').value = usuario.cargo || '';
+    document.getElementById('sueldo').value = usuario.sueldo || '';
+    document.getElementById('tipo_contrato').value = usuario.tipo_contrato || '';
+    
+    // Scroll al formulario
+    document.getElementById('usuario-form').scrollIntoView({ behavior: 'smooth' });
+    
+    mostrarNotificacion('Modo edición activado para: ' + usuario.rut, 'info');
+  } catch (error) {
+    console.error('Error al cargar datos del usuario:', error);
+    mostrarNotificacion('Error al cargar datos del usuario', 'error');
+  }
 }
 
 function filtrarReportes() {
